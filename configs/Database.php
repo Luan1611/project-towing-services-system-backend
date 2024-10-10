@@ -14,9 +14,8 @@ class Conexao
     {
         $hostname = 'localhost';
         $database = 'imc';
-        $username = 'root';
-        $password = 'senhaTeste';
-        // $password = '';
+        $username = '';
+        $password = '';
 
         $dsn = "mysql:host=$hostname;dbname=$database";
         $options = [

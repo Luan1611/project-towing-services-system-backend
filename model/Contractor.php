@@ -4,9 +4,9 @@ require_once(__DIR__ . "/../configs/Database.php");
 // Caso seja necessário acessar alguma função global auxiliar.
 require_once(__DIR__ . "/../configs/utils.php");
 
-class Administrator {
+class Contractor {
 
-    //Retorna os dados que serão carregados na página inicial do admin
+    //Obtém os dados que serão carregados na página inicial do prestador de serviços
     public static function getClientServicesSchedulings() {
         try {
             $conexao = Conexao::getConexao();
@@ -16,7 +16,7 @@ class Administrator {
                     INNER JOIN solicitacao_servico_cliente 
                     ON cliente.id = solicitacao_servico_cliente.id_cliente 
                     INNER JOIN servico 
-                    ON solicitacao_servico_cliente.id_servico = servico.id ");
+                    ON solicitacao_servico_cliente.id_servico = servico.id");
             $sql->execute();
 
             /*
@@ -30,9 +30,10 @@ class Administrator {
     }
 
     /*
-    Deleta todos as solicitações de serviços de clientes para determinada data (como retornaria todo mundo deletado para o front, para atualizar os dados?)
+    Deleta todas as solicitações de serviços de clientes em determinada data (seria necessário retornar algo para o front, em caso de sucesso?)
+    Consultas mais complexas
     */
-    public static function deleteClientServicesSchedulings($clientNames, $date) {
+    public static function deleteClientsServicesSchedulingsByDate($clientsId,$date) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -48,7 +49,7 @@ class Administrator {
     }
 
     /*
-    Retorna o registro dos serviços ofertados pelo guincheiro (administrador)
+    Retorna o registro dos serviços ofertados pelo guincheiro (prestador de serviço)
     e as informações de cada serviço
     */ 
     public static function getRegisteredServices() {

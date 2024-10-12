@@ -27,6 +27,10 @@ class Service {
         }
     }
 
+
+    /* 
+    Cria um novo serviço
+    */
     public static function createService($serviceData) {
         try {
             $conexao = Conexao::getConexao();
@@ -43,7 +47,9 @@ class Service {
         }
     }
 
-
+    /* 
+    Atualiza um serviço
+    */
     public static function updateService($serviceId) {
         try {
             $conexao = Conexao::getConexao();
@@ -60,6 +66,10 @@ class Service {
         }
     }
 
+
+    /* 
+    Deleta um serviço
+    */
     public static function deleteService($serviceId) {
         try {
             $conexao = Conexao::getConexao();
@@ -75,6 +85,5 @@ class Service {
             output(500, ["msg" => $e-getMessage()]);
         }
     }
-
 
 }

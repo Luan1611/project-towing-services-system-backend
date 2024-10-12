@@ -31,7 +31,7 @@ class Service {
     /* 
     Cria um novo serviço
     */
-    public static function createService($serviceData) {
+    public static function createService($codigo, $tipo, $preco) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(

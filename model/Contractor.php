@@ -48,23 +48,4 @@ class Contractor {
         }
     }
 
-    /*
-    Retorna o registro dos serviços ofertados pelo guincheiro (prestador de serviço)
-    e as informações de cada serviço
-    */ 
-    public static function getRegisteredServices() {
-        try {
-            $conexao = Conexao::getConexao();
-            $sql = $conexao->prepare(
-
-
-            );
-            $sql->execute();
-
-            return $sql->fetchAll();
-        } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
-        }
-    }
-
 }

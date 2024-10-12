@@ -11,21 +11,18 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $data = handleJSONInput();
 
+// Quais verificações realizar para obter todos os servicos para o prestador de servicos?
+// parte de autenticação?
 if(method("GET")) {
     try {
-        // Validações
         if(valid($_GET)) {
-            if(!Usuario::exist($_GET["id"])) {
-                throw new Exception("Usuário não encontrado", 400);
-            }
 
         }
+
         // Listar todos os serviços
-        
+        $servicesList = Service::getServices();
 
-        $lista = Usuario::listar();
-
-        output(200, $lista);
+        output(200, $servicesList);
     } catch (Exception $e) {
         //throw $th;
     }
@@ -37,11 +34,12 @@ if (method("POST")) {
             throw new Exception("Nenhuma informação encontrada", 404);
         }
         if(!valid($data, ["codigo", "tipo", "preco"])) {
-            throw new Exception("Codigo e/ou tipo e/ou preco não encontrados", 404);
+            throw new Exception("Codigo e/ou tipo e/ou preço não encontrados", 404);
         }
         if(count($data) != 3) {
             throw new Exception("Quantidade de parâmetros inválida", 400);
         }
+
 
 
 
@@ -54,7 +52,7 @@ if (method("POST")) {
         if(!$res) {
             throw new Exception("Não foi possível cadastrar o serviço", 500);
         }
-        output(200, ["msg" => "Usuário criado com sucesso"]);
+        output(200, ["msg" => "Serviço criado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
@@ -62,8 +60,9 @@ if (method("POST")) {
 
 if (method("DELETE")) {
     if (!$data) {
-        $data = $_POST;
+        throw new Exception("Nenhuma informação encontrada", 404);
     }
+    $data = $_POST;
 
     try {
         //logica delete aqui

@@ -35,11 +35,27 @@ class Service {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
+                "INSERT INTO SERVICO
+                    (codigo,
+                    tipo,
+                    preco,
+                    created_at,
+                    updated_at,
+                    active
+                    ) VALUES (
+                    :codigo,
+                    :tipo,
+                    :preco,
+                    NOW(),
+                    NOW(), 
+                    TRUE
+                    )");
 
+            $values['codigo'] = $codigo;
+            $values['tipo'] = $tipo;
+            $values['preco'] = $preco;
                     
-            $sql->execute();
+            $sql->execute($values);
 
             return $sql->fetchAll();
         } catch (Exception $e) {
@@ -54,11 +70,19 @@ class Service {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
+                "UPDATE SERVICOS SET
+                    codigo = :codigo,
+                    tipo = :tipo,
+                    preco = :preco,
+                    updated_at = NOW()
+                WHERE id = :serviceId");
 
-                    
-            $sql->execute();
+            $values['codigo'] = $codigo;
+            $values['tipo'] = $tipo;
+            $values['preco'] = $preco;
+            $values['serviceId'] = $serviceId;
+
+            $sql->execute($values);
 
             return $sql->fetchAll();
         } catch (Exception $e) {
@@ -74,10 +98,13 @@ class Service {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
+                "UPDATE SERVICOS SET
+                    active = FALSE,
+                    updated_at = NOW()
+                WHERE id = :serviceId");
 
-                    
+            $values['serviceId'] = $serviceId;
+
             $sql->execute();
 
             return $sql->fetchAll();

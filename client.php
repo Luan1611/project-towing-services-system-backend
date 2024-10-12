@@ -32,12 +32,17 @@ if (method("POST")) {
         if (count($data) != 3) {
             throw new Exception("Foram enviados dados desconhecidos", 400);
         }
-        
+
+
 
 
         // Outra verificações que fossem desejadas....
+
+        //Verificando se o telefone tem ao menos 10 "dígitos" (caracteres)
+        if (!preg_match('/^[0-9]{10,}$/', $data["telefone"]))
+            throw new Exception("CPF Inválido", 422)
         // Validando o CPF
-        if (!preg_match('/^[0-9]{11}$/', $cpf)) {
+        if (!preg_match('/^[0-9]{11}$/', $data["cpf"])) {
             throw new Exception("CPF Inválido", 422)
         }
 

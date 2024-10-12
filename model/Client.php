@@ -34,8 +34,12 @@ class Client {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
+                "SELECT 
+                    cpf, 
+                    nome, 
+                    telefone
+                FROM cliente 
+                    WHERE cpf = ?");
 
                     
             $sql->execute();
@@ -53,11 +57,17 @@ class Client {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
+                "UPDATE CLIENTES SET
+                    nome = :nome,
+                    tel = :tel
+                WHERE cpf = :cpf");
+
+            $values['nome'] = $nome;
+            $values['tel'] = $tel;
+            $values['cpf'] = $cpf;
 
                     
-            $sql->execute();
+            $sql->execute($values);
 
             return $sql->fetchAll();
         } catch (Exception $e) {

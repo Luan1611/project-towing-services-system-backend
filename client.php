@@ -17,19 +17,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $data = handleJSONInput();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Verifica se o método é do tipo POST.
 if (method("POST")) {
     // Checa se o servidor receber algum dado JSON de entrada.
@@ -39,16 +26,20 @@ if (method("POST")) {
     }
 
     try {
-        // Verifica se foram enviados os dados de "nome" e "cidade". Caso não tenham sido enviados, devolve erro ao usuário.
-        if (!valid($data, ["nome", "cidade"])) {
+        if (!valid($data, ["cpf", "nome", "telefone"])) {
             throw new Exception("Parâmetros incorretos", 400);
         }
-        // Verifica se não foram enviados coisas ALÉM do necessário...
-        if (count($data) != 2) {
+        if (count($data) != 3) {
             throw new Exception("Foram enviados dados desconhecidos", 400);
         }
+        
+
+
         // Outra verificações que fossem desejadas....
-        // ...
+        // Validando o CPF
+        if (!preg_match('/^[0-9]{11}$/', $cpf)) {
+            throw new Exception("CPF Inválido", 422)
+        }
 
         // Realiza a operação desejada
         $resultado = Exemplo::add($data["nome"], $data["cidade"]);

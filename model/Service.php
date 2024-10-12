@@ -14,10 +14,13 @@ class Service {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT css.data_realizacao_servico, s.id
-                    FROM cliente_solicita_servico
-                    INNER JOIN servicos 
-                    ON cliente.cpf = cliente_solicita_servico.cpf_cliente");
+                "SELECT
+                    id,
+                    codigo,
+                    tipo, 
+                    preco,
+                    active
+                    FROM SERVICO");
 
             $sql->execute();
 
@@ -35,8 +38,8 @@ class Service {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "INSERT INTO SERVICO
-                    (codigo,
+                "INSERT INTO SERVICO(
+                    codigo,
                     tipo,
                     preco,
                     created_at,
@@ -84,7 +87,7 @@ class Service {
 
             $sql->execute($values);
 
-            return $sql->fetchAll();
+            return $sql->rowCount();
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);
         }

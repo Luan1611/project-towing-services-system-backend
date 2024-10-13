@@ -29,7 +29,6 @@ private function validateName($name) {
     return true
 }
 
-// Verifica se o método é do tipo POST.
 if (method("POST")) {
     // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
@@ -37,8 +36,9 @@ if (method("POST")) {
         $data = $_POST;
     }
 
+    //services_id tem que ser um array
     try {
-        if (!valid($data, ["cpf", "nome", "telefone"])) {
+        if (!valid($data, ["cpf", "services_id", "data_solicitacao_servico", "data_realizacao_servico"])) {
             throw new Exception("Parâmetros incorretos", 400);
         }
         if (count($data) != 3) {
@@ -61,7 +61,7 @@ if (method("POST")) {
             throw new Exception("CPF Inválido", 422)
         }
 
-        $result = Client::createClientScheduling($data["cpf"], $data["nome"], $data["telefone"]);
+        $result = Client::createScheduling($data["cpf"], $data["nome"], $data["telefone"]);
         // Você pode configurar para o método retornar false ou similar caso haja erro ou problema...
         if (!$result) {
             // Houve algum erro inesperado no servidor.
@@ -74,58 +74,30 @@ if (method("POST")) {
     }
 }
 
-if(method("PUT")) {
+if(method("DELETE")) {
 
+    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
+        // Não recebeu, então recebe os dados via corpo normal do POST.
         $data = $_GET;
     }
 
     try {
-        // Neste caso, eu teria que enviar o CPF para conseguir atualizar os dados na tabela CLIENTE?
-        // Como ficaria depois, com o token? ele teria que ser passado para a função abaixo também?
-        if (!valid($data, ["cpf", "nome", "telefone"])) {
-            throw new Exception("Parâmetros incorretos", 400);
+        if(!$data) {
+            throw new Exception("Nenhuma informação encontrada", 404);
         }
-        if (count($data) != 3) {
+        if(!valid($data,["nome", "data_nascimento"])) {
+            throw new Exception("Nome e/ou data_nascimento não encontrados", 404);
+        }
+        if(count($data) != 2) {
             throw new Exception("Foram enviados dados desconhecidos", 400);
         }
 
-        // Validando o CPF
-        if (!preg_match('/^[0-9]{11}$/', $data["cpf"])) {
-            throw new Exception("CPF Inválido", 422)
-        }
-
-        // Verificando se o nome é válido
-        $isAValidName = validateName($data["nome"])
-
-        if (!$isAValidName) {
-            throw new Exception("Nome inválido", 400)
-        }
-
-        // Validando o CPF
-        if (!preg_match('/^[0-9]{11}$/', $data["cpf"])) {
-            throw new Exception("CPF Inválido", 422)
-        }
-
-        //Verificando se o telefone tem ao menos 10 "dígitos" (caracteres)
-        if (!preg_match('/^[0-9]{10,}$/', $data["telefone"])) {
-            throw new Exception("Telefone Inválido", 422)
-        }
-
-        if(!Client::checkIfClientExists($data["cpf"])) {
-            throw new Exception("Usuário não encontrado", 400);
-        }
-
-        $res = CLient::updateClientRegistrationData($data["cpf"], $data["nome"], $data["telefone"]);
-        if(!$res) {
-            throw new Exception("Não foi possível editar o usuário", 500);
-        }
         output(200, ["msg" => "Usuário editado com sucesso"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
 }
-
 
 
 // É comum colocar uma resposta de erro caso o método ou operação solicitada não for encontrada.

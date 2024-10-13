@@ -10,7 +10,7 @@ class Client {
     Obtém os dados dos agendamentos de determinado cliente.
     Tais dados serão carregados na página "Meus agendamentos" do cliente.
     */
-    public static function getClientSchedulingsData($clientCPF) {
+    public static function getSchedulingsData($clientCPF) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -30,7 +30,7 @@ class Client {
     /*
     Obtém os dados cadastrais do cliente
     */
-    public static function getClientRegistrationData($clientCPF) {
+    public static function getRegistrationData($clientCPF) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -53,7 +53,7 @@ class Client {
     /*
     Atualiza os dados cadastrais do cliente
     */
-    public static function updateClientRegistrationData($cpf) {
+    public static function updateRegistrationData($cpf) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -76,9 +76,9 @@ class Client {
     }
 
     /* 
-    Cria um novo agendamento para o cliente
+    Cria uma nova conta de cliente
     */
-    public static function createClientScheduling($cpf, $name, $phone) {
+    public static function createAccount($email, $password, $cpf, $name, $phone) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -97,28 +97,31 @@ class Client {
     }
 
     /* 
-    Deleta um agendamento do cliente
+    Cria um novo agendamento para o cliente
     */
-    public static function deleteClientSCheduling($schedulingData) {
+    public static function createScheduling($cpf, $services_id, $data_solicitacao_servico, $data_realizacao_servico) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
-
+                //TODO
+            );
                     
             $sql->execute();
 
+            // Neste caso, é necessário verificar quantas tuplas foram afetadas antes
+            // de qualquer return?
             return $sql->fetchAll();
+
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);
         }
     }
 
-
-    public static function checkIfClientExists($cpf) {
+    public static function checkIfExists($cpf) {
         try {
             $conexao = Conexao::getConexao();
+
+            //TODO
             $sql = $conexao->prepare(
                 "SELECT cpf, nome, telefone
                     FROM cliente WHERE cpf = ?");

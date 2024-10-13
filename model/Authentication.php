@@ -14,7 +14,7 @@ class Authentication {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
+                "SELECT auth
                     FROM auth WHERE cpf = ?");
 
                     
@@ -34,7 +34,7 @@ class Authentication {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
+                "SELECT auth
                     FROM auth WHERE cpf = ?");
 
                     

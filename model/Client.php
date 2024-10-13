@@ -53,7 +53,7 @@ class Client {
     /*
     Atualiza os dados cadastrais do cliente
     */
-    public static function updateClientRegistrationData($clientCPF) {
+    public static function updateClientRegistrationData($cpf) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -78,17 +78,19 @@ class Client {
     /* 
     Cria um novo agendamento para o cliente
     */
-    public static function createClientSCheduling($schedulingData) {
+    public static function createClientScheduling($cpf, $name, $phone) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
-
+                //TODO
+            );
                     
             $sql->execute();
 
+            // Neste caso, é necessário verificar quantas tuplas foram afetadas antes
+            // de qualquer return?
             return $sql->fetchAll();
+
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);
         }
@@ -108,6 +110,24 @@ class Client {
             $sql->execute();
 
             return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e-getMessage()]);
+        }
+    }
+
+
+    public static function checkIfClientExists($cpf) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT cpf, nome, telefone
+                    FROM cliente WHERE cpf = ?");
+
+                    
+            $sql->execute();
+                //Se o retorno for 1 tupla, cliente existe
+                // do contrario, nao existe
+
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);
         }

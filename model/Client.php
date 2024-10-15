@@ -19,6 +19,7 @@ class Client {
                     INNER JOIN servicos 
                     ON cliente.cpf = cliente_solicita_servico.cpf_cliente");
 
+            //TODO: reformular string de consulta
             $sql->execute();
 
             return $sql->fetchAll();
@@ -53,8 +54,6 @@ class Client {
     /*
     Atualiza os dados cadastrais do cliente
     */
-
-    // essa variável $values foi declarada onde?
     public static function updateRegistrationData($cpf, $name, $phone) {
         try {
             $conexao = Conexao::getConexao();
@@ -68,6 +67,8 @@ class Client {
             $values['tel'] = $tel;
             $values['cpf'] = $cpf;
 
+            //TODO: checar quantas tuplas foram afetadas e condicionar o return
+            // ao resultado
                     
             $sql->execute($values);
 
@@ -125,8 +126,7 @@ class Client {
 
             //TODO: string sql
             $sql = $conexao->prepare(
-                "SELECT cpf, nome, telefone
-                    FROM cliente WHERE cpf = ?");
+                "SELECT cpf FROM cliente WHERE cpf = ?");
 
                     
             $sql->execute();

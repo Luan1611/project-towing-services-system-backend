@@ -16,6 +16,15 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Caso não tenha sido enviado nada no formato JSON, retorna FALSE.
 $data = handleJSONInput();
 
+private function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
+    if (!valid($data, $arrayNamesAttributes)) {
+        throw new Exception("Parâmetros incorretos", 400);
+    }
+    if (count($data) != $inputsNumber) {
+        throw new Exception("Foram enviados dados desconhecidos", 400);
+    }
+}
+
 private function validateName($name) {
     $nameTrimmed = trim($name)
     $trimmedNameLength = strlen(nameTrimmed);
@@ -23,10 +32,44 @@ private function validateName($name) {
     $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name)
 
     if ($trimmedNameLength === 0 || $nameContainsNumericValues || $nameContainsSpecialCharacters) {
-        return false
+        throw new Exception("Nome inválido", 400)
+    }
+}
+
+private function validateCPF($cpf) {
+    if (!preg_match('/^[0-9]{11}$/', $cpf)) {
+        throw new Exception("CPF Inválido", 422)
+    }
+}
+
+private function validateDate($date) {
+    // Regex para validar o formato YYYY-MM-DD
+    $dateFormatRegex = '/^\d{4}-\d{2}-\d{2}$/';
+
+    if (!preg_match($dateFormatRegex, $data)) {
+        throw new Exception("Formato de Data inválido", 400)
     }
 
-    return true
+    // Fazendo destructuring da data e armazenando em variáveis.
+    [$ano, $mes, $dia] = explode('-', $date)
+
+    // Checando se a data é uma data válida
+    if (!checkdate($mes, $dia, $ano)) {
+        throw new Exception("Data inválida", 400)
+    }
+}
+
+//$servicesId deve ser um array indexado
+private function validateServicesIds($servicesIds) {
+    $servicesIdsArrayLength = count(servicesIds)
+    if (!$servicesIdsArrayLength) {
+        throw new Exception("Ids dos serviços não encontrados", 400)
+    }
+    foreach ($servicesIds as $serviceId) {
+		if (!is_int($serviceId)) {
+            throw new Exception("Id(s) com formato inválido", 400)
+        }
+	}
 }
 
 if (method("POST")) {
@@ -36,38 +79,36 @@ if (method("POST")) {
         $data = $_POST;
     }
 
-    //services_id tem que ser um array
+    // 'services_ids' tem que ser um array (de números inteiros)
     try {
-        if (!valid($data, ["cpf", "services_id", "data_solicitacao_servico", "data_realizacao_servico"])) {
-            throw new Exception("Parâmetros incorretos", 400);
-        }
-        if (count($data) != 3) {
-            throw new Exception("Foram enviados dados desconhecidos", 400);
-        }
+        validateParameters(
+            $data,
+            ["cpf", "services_ids", "data_solicitacao_servico", "data_realizacao_servico"],
+            3
+        )
 
-        // Verificando se o nome é válido
-        $isAValidName = validateName($data["nome"])
+        // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
+        validateCPF($data["cpf"])
 
-        if (!$isAValidName) {
-            throw new Exception("Nome inválido", 400)
-        }
+        // Validação do formato das datas
+        validateDate($data["data_solicitacao_servico"])
+        validateDate($data["data_realizacao_servico"])
 
-        //Verificando se o telefone tem ao menos 10 "dígitos" (caracteres)
-        if (!preg_match('/^[0-9]{10,}$/', $data["telefone"]))
-            throw new Exception("Telefone Inválido", 422)
+        validateServicesIds("services_ids")
 
-        // Validando o CPF
-        if (!preg_match('/^[0-9]{11}$/', $data["cpf"])) {
-            throw new Exception("CPF Inválido", 422)
-        }
+        //services_id tem que ser um array com os ids dos serviços solicitados
+        $result = Client::createScheduling(
+            $data["cpf"],
+            $data["services_ids"],
+            $data["data_solicitacao_servico"],
+            $data["data_realizacao_servico"]
+        );
 
-        $result = Client::createScheduling($data["cpf"], $data["nome"], $data["telefone"]);
-        // Você pode configurar para o método retornar false ou similar caso haja erro ou problema...
         if (!$result) {
             // Houve algum erro inesperado no servidor.
             throw new Exception("Erro de servidor", 500);
         }
-        // Deu tudo certo, retorna o resultado da operação. A mensagem e o código HTTP podem variar conforme a necessidade
+        // Teremos que retornar os dados do novo agendamento em caso de sucesso?
         output(200, $result);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);

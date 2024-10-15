@@ -16,6 +16,15 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Caso não tenha sido enviado nada no formato JSON, retorna FALSE.
 $data = handleJSONInput();
 
+private function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
+    if (!valid($data, $arrayNamesAttributes)) {
+        throw new Exception("Parâmetros incorretos", 400);
+    }
+    if (count($data) != $inputsNumber) {
+        throw new Exception("Foram enviados dados desconhecidos", 400);
+    }
+}
+
 private function validateName($name) {
     $nameTrimmed = trim($name)
     $trimmedNameLength = strlen(nameTrimmed);
@@ -23,11 +32,22 @@ private function validateName($name) {
     $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name)
 
     if ($trimmedNameLength === 0 || $nameContainsNumericValues || $nameContainsSpecialCharacters) {
-        return false
+        throw new Exception("Nome inválido", 400)
     }
-
-    return true
 }
+
+private function validatePhoneNumber($phoneNumber) {
+    if (!preg_match('/^[0-9]{10,}$/', $phoneNumber)) {
+        throw new Exception("Telefone Inválido", 422)
+    }
+}
+
+private function validateCPF($cpf) {
+    if (!preg_match('/^[0-9]{11}$/', $cpf)) {
+        throw new Exception("CPF Inválido", 422)
+    }
+}
+
 
 if (method("POST")) {
     // Checa se o servidor receber algum dado JSON de entrada.
@@ -37,28 +57,17 @@ if (method("POST")) {
     }
 
     try {
-        if (!valid($data, ["cpf", "nome", "telefone"])) {
-            throw new Exception("Parâmetros incorretos", 400);
-        }
-        if (count($data) != 3) {
-            throw new Exception("Foram enviados dados desconhecidos", 400);
-        }
+        // Faz validações básicas de parâmetros
+        validateParameters($data, ["cpf", "nome", "telefone"], 3)
 
-        // Verificando se o nome é válido
-        $isAValidName = validateName($data["nome"])
+        // Verifica se o nome é válido
+        validateName($data["nome"])
 
-        if (!$isAValidName) {
-            throw new Exception("Nome inválido", 400)
-        }
+        //Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
+        validatePhoneNumber($data["telefone"])
 
-        //Verificando se o telefone tem ao menos 10 "dígitos" (caracteres)
-        if (!preg_match('/^[0-9]{10,}$/', $data["telefone"]))
-            throw new Exception("Telefone Inválido", 422)
-
-        // Validando o CPF
-        if (!preg_match('/^[0-9]{11}$/', $data["cpf"])) {
-            throw new Exception("CPF Inválido", 422)
-        }
+        // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
+        validateCPF($data["cpf"])
 
         $result = Client::createScheduling($data["cpf"], $data["nome"], $data["telefone"]);
         // Você pode configurar para o método retornar false ou similar caso haja erro ou problema...
@@ -73,7 +82,7 @@ if (method("POST")) {
     }
 }
 
-
+// Como ficaria depois, com o token?
 if(method("PUT")) {
 
     if (!$data) {
@@ -81,42 +90,23 @@ if(method("PUT")) {
     }
 
     try {
-        // Neste caso, eu teria que enviar o CPF para conseguir atualizar os dados na tabela CLIENTE?
-        // Como ficaria depois, com o token? ele teria que ser passado para a função abaixo também?
-        if (!valid($data, ["cpf", "nome", "telefone"])) {
-            throw new Exception("Parâmetros incorretos", 400);
-        }
-        if (count($data) != 3) {
-            throw new Exception("Foram enviados dados desconhecidos", 400);
-        }
+        // Faz validações básicas de parâmetros
+        validateParameters($data, ["cpf", "nome", "telefone"], 3)
 
-        // Validando o CPF
-        if (!preg_match('/^[0-9]{11}$/', $data["cpf"])) {
-            throw new Exception("CPF Inválido", 422)
-        }
+        // Verifica se o nome é válido
+        validateName($data["nome"])
 
-        // Verificando se o nome é válido
-        $isAValidName = validateName($data["nome"])
+        //Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
+        validatePhoneNumber($data["telefone"])
 
-        if (!$isAValidName) {
-            throw new Exception("Nome inválido", 400)
-        }
-
-        // Validando o CPF
-        if (!preg_match('/^[0-9]{11}$/', $data["cpf"])) {
-            throw new Exception("CPF Inválido", 422)
-        }
-
-        //Verificando se o telefone tem ao menos 10 "dígitos" (caracteres)
-        if (!preg_match('/^[0-9]{10,}$/', $data["telefone"])) {
-            throw new Exception("Telefone Inválido", 422)
-        }
+        // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
+        validateCPF($data["cpf"])
 
         if(!Client::checkIfExists($data["cpf"])) {
             throw new Exception("Usuário não encontrado", 400);
         }
 
-        $res = CLient::updateClientRegistrationData($data["cpf"], $data["nome"], $data["telefone"]);
+        $res = Client::updateRegistrationData($data["cpf"], $data["nome"], $data["telefone"]);
         if(!$res) {
             throw new Exception("Não foi possível editar o usuário", 500);
         }

@@ -10,6 +10,7 @@ class Authentication {
     Retorna os dados cadastrais do usuário (client ou prestador de serviço), a partir
     do email e senha do mesmo
     */
+    //TODO: string sql
     public static function getUserAuthenticationData($userData) {
         try {
             $conexao = Conexao::getConexao();
@@ -30,6 +31,7 @@ class Authentication {
     /* 
         Retorna true se os dados forem criados com sucesso
     */
+    //TODO: string SQL
     public static function createUserAccount($userData) {
         try {
             $conexao = Conexao::getConexao();

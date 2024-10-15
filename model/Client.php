@@ -10,7 +10,7 @@ class Client {
     Obtém os dados dos agendamentos de determinado cliente.
     Tais dados serão carregados na página "Meus agendamentos" do cliente.
     */
-    public static function getSchedulingsData($clientCPF) {
+    public static function getSchedulingsData($cpf) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -30,7 +30,7 @@ class Client {
     /*
     Obtém os dados cadastrais do cliente
     */
-    public static function getRegistrationData($clientCPF) {
+    public static function getRegistrationData($cpf) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -53,7 +53,9 @@ class Client {
     /*
     Atualiza os dados cadastrais do cliente
     */
-    public static function updateRegistrationData($cpf) {
+
+    // essa variável $values foi declarada onde?
+    public static function updateRegistrationData($cpf, $name, $phone) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -121,7 +123,7 @@ class Client {
         try {
             $conexao = Conexao::getConexao();
 
-            //TODO
+            //TODO: string sql
             $sql = $conexao->prepare(
                 "SELECT cpf, nome, telefone
                     FROM cliente WHERE cpf = ?");

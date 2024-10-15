@@ -37,7 +37,7 @@ class Contractor {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-
+                //TODO
 
             );
             $sql->execute();

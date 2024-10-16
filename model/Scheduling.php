@@ -4,7 +4,7 @@ require_once(__DIR__ . "/../configs/Database.php");
 // Caso seja necessário acessar alguma função global auxiliar.
 require_once(__DIR__ . "/../configs/utils.php");
 
-class NotLogged {
+class Scheduling {
     
     /*
     Obtém os dados que serão carregados no site para os visitantes (não logados)

@@ -30,7 +30,6 @@ class Service {
         }
     }
 
-
     /* 
     Cria um novo serviço
     */
@@ -92,7 +91,6 @@ class Service {
             output(500, ["msg" => $e-getMessage()]);
         }
     }
-
 
     /* 
     Deleta um serviço

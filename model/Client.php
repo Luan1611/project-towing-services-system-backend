@@ -84,15 +84,53 @@ class Client {
     public static function createAccount($email, $password, $cpf, $name, $phone) {
         try {
             $conexao = Conexao::getConexao();
+            
+            $conexao->beginTransaction();
+
             $sql = $conexao->prepare(
-                //TODO
+                "INSERT INTO AUTH (
+                    email,
+                    senha,
+                    user_id,
+                    classe_de_acesso
+                ) VALUES (
+                    :email,
+                    :senha,
+                    :userId,
+                    :classeDeAcesso
+                )"
             );
+            
+            $values['email'] = $email;  
+            $values['senha'] = $password;  
+            $values['userId'] = $cpf;  
+            $values['classeDeAcesso'] = 1;  
                     
-            $sql->execute();
+            $sql->execute($values);
+
+            $sqlClient = $conexao->prepare(
+                "INSERT INTO CLIENTES (
+                    nome,
+                    cpf,
+                    tel
+                ) VALUES (
+                    :nome,
+                    :cpf,
+                    :tel
+                )"
+            );
+
+            $valuesClient['nome'] = $email;  
+            $valuesClient['tel'] = $password;  
+            $valuesClient['cpf'] = $cpf;
+
+            $sqlClient->execute($valuesClient);
 
             // Neste caso, é necessário verificar quantas tuplas foram afetadas antes
-            // de qualquer return?
-            return $sql->fetchAll();
+            // de qualquer return? Não, não vamos renderizar nada na tela.
+            $conexao->commit();
+
+            return TRUE;
 
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);
@@ -105,14 +143,30 @@ class Client {
     public static function createScheduling($cpf, $services_id, $data_solicitacao_servico, $data_realizacao_servico) {
         try {
             $conexao = Conexao::getConexao();
+            
             $sql = $conexao->prepare(
-                //TODO
+                "INSERT INTO CLIENTE_SOLICITA_SERVICO (
+                    cpf_cliente,
+                    id_servico,
+                    data_solicitacao_servico,
+                    data_realizacao_servico
+                ) VALUES (
+                    :clientCpf,
+                    :serviceId,
+                    :solicitationData,
+                    :realizationData
+                )"
             );
+
+            $values['clientCpf'] = $cpf;  
+            $values['serviceId'] = $services_id;  
+            $values['solicitationData'] = $data_solicitacao_servico;  
+            $values['realizationData'] = $data_realizacao_servico;  
                     
-            $sql->execute();
+            $sql->execute($values);
 
             // Neste caso, é necessário verificar quantas tuplas foram afetadas antes
-            // de qualquer return?
+            // de qualquer return? //sim, como?
             return $sql->fetchAll();
 
         } catch (Exception $e) {
@@ -120,21 +174,22 @@ class Client {
         }
     }
 
+    //DONE
     public static function checkIfExists($cpf) {
         try {
             $conexao = Conexao::getConexao();
 
-            //TODO: string sql
             $sql = $conexao->prepare(
-                "SELECT cpf FROM cliente WHERE cpf = ?");
-
-                    
-            $sql->execute();
-                //Se o retorno for 1 tupla, cliente existe
-                // do contrario, nao existe
+                "SELECT cpf FROM cliente WHERE cpf = :cpf");
+            
+            $values['cpf'] = $cpf;  
+            
+            $sql->execute($values);
+                            
+            return !empty($sql->fetchAll());
 
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 

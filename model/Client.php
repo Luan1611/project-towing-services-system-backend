@@ -14,13 +14,19 @@ class Client {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT css.data_realizacao_servico, s.id
-                    FROM cliente_solicita_servico
-                    INNER JOIN servicos 
-                    ON cliente.cpf = cliente_solicita_servico.cpf_cliente");
+                "SELECT 
+                    css.data_realizacao_servico, 
+                    s.id, 
+                    s.name,
+                    s.valor
+                FROM cliente_solicita_servico css
+                INNER JOIN servicos 
+                    ON s.id = css.id_servicos
+                WHERE css.cpf_cliente = :cpf");
 
+            $values['cpf'] = $cpf
             //TODO: reformular string de consulta
-            $sql->execute();
+            $sql->execute($values);
 
             return $sql->fetchAll();
         } catch (Exception $e) {
@@ -40,10 +46,11 @@ class Client {
                     nome, 
                     telefone
                 FROM cliente 
-                    WHERE cpf = ?");
+                    WHERE cpf = :cpf");
 
+            $values['cpf'] = $cpf;
                     
-            $sql->execute();
+            $sql->execute($values);
 
             return $sql->fetchAll();
         } catch (Exception $e) {

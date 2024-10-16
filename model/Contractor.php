@@ -33,7 +33,7 @@ class Contractor {
     Deleta todas as solicitações de serviços de clientes em determinada data (seria necessário retornar algo para o front, em caso de sucesso?)
     Consultas mais complexas
     */
-    public static function deleteClientsServicesSchedulingsByDate($clientsId,$date) {
+    public static function deleteClientsServicesSchedulingsByDate($clientsCPF, $date) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(

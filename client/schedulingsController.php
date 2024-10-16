@@ -140,6 +140,5 @@ if(method("DELETE")) {
     }
 }
 
-
 // É comum colocar uma resposta de erro caso o método ou operação solicitada não for encontrada.
 output(404, ["msg" => "Método não suportado no momento"]);

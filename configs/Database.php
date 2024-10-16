@@ -13,8 +13,8 @@ class Conexao
     private function __construct()
     {
         $hostname = 'localhost';
-        $database = 'imc';
-        $username = '';
+        $database = 'towing-services-system';
+        $username = 'root';
         $password = '';
 
         $dsn = "mysql:host=$hostname;dbname=$database";

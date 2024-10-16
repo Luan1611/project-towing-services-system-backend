@@ -13,17 +13,17 @@ class Scheduling {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT c.nome, s.tipo, ssc.data_realizacao_servico
-                    FROM cliente 
+                "SELECT clientes.nome, servicos.tipo,  cliente_solicita_servico.data_realizacao_servico
+                    FROM clientes 
                     INNER JOIN cliente_solicita_servico 
-                    ON cliente.cpf = cliente_solicita_servico.cpf_cliente 
-                    INNER JOIN servico 
-                    ON cliente_solicita_servico.id_servico = servico.id ");
+                    ON clientes.cpf = cliente_solicita_servico.cpf_cliente 
+                    INNER JOIN servicos
+                    ON cliente_solicita_servico.id_servico = servicos.id ");
             $sql->execute();
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 }

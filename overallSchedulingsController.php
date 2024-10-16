@@ -3,7 +3,7 @@
 // Arquivos com funções úteis que vão ser usadas nesta rota.
 require_once(__DIR__ . "/configs/utils.php");
 // Arquivos com as entidades (models) que vão ser usadas nesta rota.
-require_once(__DIR__ . "/model/Exemplo.php");
+require_once(__DIR__ . "/model/Scheduling.php");
 
 // Bloco de código configurando o servidor. Remover os métodos que não forem suportados.
 header("Access-Control-Max-Age: 3600");
@@ -27,7 +27,7 @@ if(method("GET")) {
         }
         output(200, $lista);
     } catch (Exception $e) {
-        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500)
+        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);
     }
 }
 

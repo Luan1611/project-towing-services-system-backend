@@ -20,13 +20,13 @@ class Service {
                     tipo, 
                     preco,
                     active
-                    FROM SERVICO");
+                    FROM SERVICOS");
 
             $sql->execute();
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -37,7 +37,7 @@ class Service {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "INSERT INTO SERVICO(
+                "INSERT INTO SERVICOS(
                     codigo,
                     tipo,
                     preco,
@@ -59,9 +59,14 @@ class Service {
                     
             $sql->execute($values);
 
-            return $sql->fetchAll();
+            $lastId = $conexao->lastInsertId();
+
+            $stmt = $conexao->prepare("SELECT * FROM SERVICOS WHERE id = :id");
+            $stmt->execute([':id' => $lastId]);
+
+            return $stmt->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -88,7 +93,7 @@ class Service {
 
             return $sql->rowCount();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -110,7 +115,7 @@ class Service {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 

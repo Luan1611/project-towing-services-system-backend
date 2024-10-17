@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . "/configs/utils.php");
-require_once(__DIR__ . "/model/Exemplo.php");
+require_once(__DIR__ . "/model/Service.php");
 
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -16,7 +16,7 @@ $data = handleJSONInput();
 if(method("GET")) {
     try {
         if(valid($_GET)) {
-
+            //where?
         }
 
         // Listar todos os serviços
@@ -40,15 +40,8 @@ if (method("POST")) {
             throw new Exception("Quantidade de parâmetros inválida", 400);
         }
 
-
-
-
-        // Todas as checagens possíveis.
-        // ...
-
-
-
         $res = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
+        
         if(!$res) {
             throw new Exception("Não foi possível cadastrar o serviço", 500);
         }

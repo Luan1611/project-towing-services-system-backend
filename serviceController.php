@@ -11,15 +11,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $data = handleJSONInput();
 
-private function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
-    if (!valid($data, $arrayNamesAttributes)) {
-        throw new Exception("Parâmetro(s) incorreto(s)", 400);
-    }
-    if (count($data) != $inputsNumber) {
-        throw new Exception("Quantidade de parâmetros inválida", 406);
-    }
-}
-
 // Verifica se o código é composto por 2 caracteres,
 // e se o mesmo não contém caracteres especiais
 private function validateCode($code) {
@@ -36,8 +27,6 @@ private function validateType($type) {
     }
 }
 
-// questão: a variável $price armazena uma string ou já um número?
-
 // Verifica se o preço é composto por, no máximo, 10 algarismos (sendo decimal ou inteiro),
 // e se há apenas caracteres de 0 a 9 na string, aceitando um único ponto opcional
 private function validatePrice($price) {
@@ -46,20 +35,23 @@ private function validatePrice($price) {
     }
 }
 
-
 // Quais verificações realizar para obter todos os servicos para o prestador de servicos?
 // parte de autenticação?
 if(method("GET")) {
+    if (!$data) {
+        // Não recebeu, então recebe os dados via corpo normal do GET.
+        $data = $_GET;
+    }
+
     try {
-        // Listar todos os serviços
+        // Lista todos os serviços
         $servicesList = Service::getServices();
 
-        if (!empty($servicesList)) {
-            output(200, $servicesList);
+        if (empty($servicesList)) {
+            output(204, ["msg" => "Não há serviços para serem exibidos"]);
         }
-
-        output(204, "Não há serviços para serem exibidos");
         
+        output(200, $servicesList);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
@@ -74,9 +66,10 @@ if (method("POST")) {
 
     try {
         validateParameters($data, ["codigo", "tipo", "preco"], 3)
-
         validateCode($data["codigo"])
         validateType($data["codigo"])
+
+        // questão: a variável $price armazena uma string ou já um número?
         validatePreco($data["preco"])
 
         $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
@@ -91,20 +84,16 @@ if (method("POST")) {
 }
 
 if (method("DELETE")) {
-
+    // considerando que o form data não suporta DELETE nem PUT, como receber dados para deleção? se eles não chegarem num JSON, como armazená-los?
     if (!$data) {
-        $data = $_POST;
+        //TODO
     }
     
     try {
-
-
         output(200, $result);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
 }
-
-
 
 output(404, ["msg" => "Método não suportado no momento"]);

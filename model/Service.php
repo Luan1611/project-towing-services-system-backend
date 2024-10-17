@@ -7,8 +7,7 @@ require_once(__DIR__ . "/../configs/utils.php");
 class Service {
 
     /*
-    Retorna o registro dos serviços ofertados pelo guincheiro (prestador de serviço)
-    e as informações de cada serviço
+    Retorna as informações dos serviços ofertados pelo guincheiro (prestador de serviço)
     */ 
     public static function getServices() {
         try {
@@ -33,6 +32,10 @@ class Service {
     /* 
     Cria um novo serviço
     */
+
+    //TODO: se eu tenho um serviço armazenado cujo valor do ACTIVE seja false,
+    // e tento criar um serviço novo idêntico, eu preciso apenas atualizar a
+    // coluna ACTIVE do serviço inativado para true?
     public static function createService($codigo, $tipo, $preco) {
         try {
             $conexao = Conexao::getConexao();

@@ -18,14 +18,21 @@ $data = handleJSONInput();
 
 // Listar algo.
 if(method("GET")) {
+    if (!$data) {
+        // Não recebeu, então recebe os dados via corpo normal do GET.
+        $data = $_GET;
+    }
+
     try {
         // Lista todos os agendamentos
-        $lista = Scheduling::getSchedulings();
+        $schedulingsList = Scheduling::getSchedulings();
 
-        if (empty($lista)) {
-            output(204, ["msg" => "Nenhum agendamento encontrado."]);
+        if (empty($schedulingsList)) {
+            output(204, ["msg" => "Não há agendamentos para serem exibidos"]);
         }
-        output(200, $lista);
+        
+        //TODO: retornar JSON
+        output(200, $schedulingsList);
     } catch (Exception $e) {
         throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);
     }

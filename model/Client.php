@@ -8,7 +8,7 @@ class Client {
 
     /*
     Obtém os dados dos agendamentos de determinado cliente.
-    Tais dados serão carregados na página "Meus agendamentos" do cliente.
+    Tais dados serão carregados na página "Meus Agendamentos" do cliente.
     */
     public static function getSchedulingsData($cpf) {
         try {
@@ -181,7 +181,6 @@ class Client {
         }
     }
 
-    //DONE
     public static function checkIfExists($cpf) {
         try {
             $conexao = Conexao::getConexao();
@@ -189,10 +188,10 @@ class Client {
             $sql = $conexao->prepare(
                 "SELECT cpf FROM cliente WHERE cpf = :cpf");
             
-            $values['cpf'] = $cpf;  
+            $values['cpf'] = $cpf;
             
             $sql->execute($values);
-                            
+
             return !empty($sql->fetchAll());
 
         } catch (Exception $e) {

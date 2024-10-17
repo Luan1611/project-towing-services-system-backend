@@ -7,7 +7,7 @@ require_once(__DIR__ . "/../configs/utils.php");
 class Scheduling {
     
     /*
-    Obtém os dados que serão carregados no site para os visitantes (não logados)
+    Obtém os dados que serão carregados no site para os visitantes (usuários não logados)
     */
     public static function getSchedulings() {
         try {
@@ -26,4 +26,5 @@ class Scheduling {
             output(500, ["msg" => $e->getMessage()]);
         }
     }
+    
 }

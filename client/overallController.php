@@ -16,15 +16,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Caso não tenha sido enviado nada no formato JSON, retorna FALSE.
 $data = handleJSONInput();
 
-private function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
-    if (!valid($data, $arrayNamesAttributes)) {
-        throw new Exception("Parâmetros incorretos", 400);
-    }
-    if (count($data) != $inputsNumber) {
-        throw new Exception("Quantidade de parâmetros inválida", 400);
-    }
-}
-
+// Verifica se o nome é um nome válido
 private function validateName($name) {
     $nameTrimmed = trim($name)
     $trimmedNameLength = strlen(nameTrimmed);
@@ -36,18 +28,12 @@ private function validateName($name) {
     }
 }
 
+//Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
 private function validatePhoneNumber($phoneNumber) {
     if (!preg_match('/^[0-9]{10,}$/', $phoneNumber)) {
         throw new Exception("Telefone Inválido", 406)
     }
 }
-
-private function validateCPF($cpf) {
-    if (!preg_match('/^[0-9]{11}$/', $cpf)) {
-        throw new Exception("CPF Inválido", 422)
-    }
-}
-
 
 if (method("POST")) {
     // Checa se o servidor receber algum dado JSON de entrada.
@@ -57,16 +43,9 @@ if (method("POST")) {
     }
 
     try {
-        // Faz validações básicas de parâmetros
         validateParameters($data, ["cpf", "nome", "telefone"], 3)
-
-        // Verifica se o nome é válido
         validateName($data["nome"])
-
-        //Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
         validatePhoneNumber($data["telefone"])
-
-        // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
         validateCPF($data["cpf"])
 
         $result = Client::createScheduling($data["cpf"], $data["nome"], $data["telefone"]);

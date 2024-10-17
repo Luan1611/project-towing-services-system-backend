@@ -15,10 +15,8 @@ class Authentication {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT auth
-                    FROM auth WHERE cpf = ?");
-
-                    
+            //TODO
+            );
             $sql->execute();
 
             return $sql->fetchAll();
@@ -36,10 +34,8 @@ class Authentication {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT auth
-                    FROM auth WHERE cpf = ?");
-
-                    
+            //TODO
+            );
             $sql->execute();
 
             return $sql->fetchAll();

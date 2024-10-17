@@ -16,46 +16,19 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Caso não tenha sido enviado nada no formato JSON, retorna FALSE.
 $data = handleJSONInput();
 
-private function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
-    if (!valid($data, $arrayNamesAttributes)) {
-        throw new Exception("Parâmetros incorretos", 400);
-    }
-    if (count($data) != $inputsNumber) {
-        throw new Exception("Foram enviados dados desconhecidos", 400);
-    }
-}
-
 private function validateName($name) {
     $nameTrimmed = trim($name)
-    $trimmedNameLength = strlen(nameTrimmed);
+    $trimmedNameLength = strlen($nameTrimmed);
     $nameContainsNumericValues = preg_match('/[0-9]/', $name)
     $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name)
 
-    if ($trimmedNameLength === 0 || $nameContainsNumericValues || $nameContainsSpecialCharacters) {
+    $isInvalidName =
+        $trimmedNameLength === 0
+        || $nameContainsNumericValues
+        || $nameContainsSpecialCharacters;
+
+    if ($isInvalidName) {
         throw new Exception("Nome inválido", 400)
-    }
-}
-
-private function validateCPF($cpf) {
-    if (!preg_match('/^[0-9]{11}$/', $cpf)) {
-        throw new Exception("CPF Inválido", 422)
-    }
-}
-
-private function validateDate($date) {
-    // Regex para validar o formato YYYY-MM-DD
-    $dateFormatRegex = '/^\d{4}-\d{2}-\d{2}$/';
-
-    if (!preg_match($dateFormatRegex, $data)) {
-        throw new Exception("Formato de Data inválido", 400)
-    }
-
-    // Fazendo destructuring da data e armazenando em variáveis.
-    [$ano, $mes, $dia] = explode('-', $date)
-
-    // Checando se a data é uma data válida
-    if (!checkdate($mes, $dia, $ano)) {
-        throw new Exception("Data inválida", 400)
     }
 }
 
@@ -86,11 +59,7 @@ if (method("POST")) {
             ["cpf", "services_ids", "data_solicitacao_servico", "data_realizacao_servico"],
             3
         )
-
-        // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
         validateCPF($data["cpf"])
-
-        // Validação do formato das datas
         validateDate($data["data_solicitacao_servico"])
         validateDate($data["data_realizacao_servico"])
 
@@ -116,7 +85,6 @@ if (method("POST")) {
 }
 
 if(method("DELETE")) {
-
     // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
         // Não recebeu, então recebe os dados via corpo normal do POST.

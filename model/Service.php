@@ -23,7 +23,7 @@ class Service {
                     FROM SERVICOS");
 
             $sql->execute();
-
+            
             return $sql->fetchAll();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);

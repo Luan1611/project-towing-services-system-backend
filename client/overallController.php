@@ -3,7 +3,7 @@
 // Arquivos com funções úteis que vão ser usadas nesta rota.
 require_once(__DIR__ . "/configs/utils.php");
 // Arquivos com as entidades (models) que vão ser usadas nesta rota.
-require_once(__DIR__ . "/model/Exemplo.php");
+require_once(__DIR__ . "/model/Client.php");
 
 // Bloco de código configurando o servidor. Remover os métodos que não forem suportados.
 header("Access-Control-Max-Age: 3600");
@@ -21,7 +21,7 @@ private function validateParameters($data, $arrayNamesAttributes, $inputsNumber)
         throw new Exception("Parâmetros incorretos", 400);
     }
     if (count($data) != $inputsNumber) {
-        throw new Exception("Foram enviados dados desconhecidos", 400);
+        throw new Exception("Quantidade de parâmetros inválida", 400);
     }
 }
 
@@ -73,10 +73,10 @@ if (method("POST")) {
         // Você pode configurar para o método retornar false ou similar caso haja erro ou problema...
         if (!$result) {
             // Houve algum erro inesperado no servidor.
-            throw new Exception("Erro de servidor", 500);
+            throw new Exception("Não foi possível cadastrar o agendamento", 500);
         }
         // Deu tudo certo, retorna o resultado da operação. A mensagem e o código HTTP podem variar conforme a necessidade
-        output(200, $result);
+        output(200, "msg" => "Agendamento criado com sucesso!");
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
@@ -96,12 +96,13 @@ if(method("PUT")) {
         // Verifica se o nome é válido
         validateName($data["nome"])
 
-        //Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
+        // Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
         validatePhoneNumber($data["telefone"])
 
         // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
         validateCPF($data["cpf"])
 
+        // Verifica se o cpf do cliente está armazenado na base de dados
         if(!Client::checkIfExists($data["cpf"])) {
             throw new Exception("Usuário não encontrado", 400);
         }

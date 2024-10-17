@@ -38,7 +38,7 @@ private function validateName($name) {
 
 private function validatePhoneNumber($phoneNumber) {
     if (!preg_match('/^[0-9]{10,}$/', $phoneNumber)) {
-        throw new Exception("Telefone Inválido", 422)
+        throw new Exception("Telefone Inválido", 406)
     }
 }
 
@@ -76,7 +76,7 @@ if (method("POST")) {
             throw new Exception("Não foi possível cadastrar o agendamento", 500);
         }
         // Deu tudo certo, retorna o resultado da operação. A mensagem e o código HTTP podem variar conforme a necessidade
-        output(200, "msg" => "Agendamento criado com sucesso!");
+        output(200, ["msg" => "Agendamento criado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

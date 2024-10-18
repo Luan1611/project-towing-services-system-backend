@@ -189,43 +189,23 @@ class Client {
     }
 
     /* 
-    Deleta um novo agendamento para o cliente
+    Deleta um agendamento do cliente
     */
     public static function deleteScheduling($schedulingId) {
         try {
             $conexao = Conexao::getConexao();
-            
-            $conexao->beginTransaction();
 
             $sql = $conexao->prepare(
-                "INSERT INTO CLIENTE_SOLICITA_SERVICO (
-                    cpf_cliente,
-                    id_servico,
-                    data_solicitacao_servico,
-                    data_realizacao_servico
-                ) VALUES (
-                    :clientCpf,
-                    :serviceId,
-                    :solicitationData,
-                    :realizationData
-                )"
+                "UPDATE CLIENTE_SOLICITA_SERVICO SET
+                    active = FALSE
+                WHERE id = :id"
             );
 
-            $values['clientCpf'] = $cpf;  
-            $values['serviceId'] = $services_id;  
-            $values['solicitationData'] = $data_solicitacao_servico;  
-            $values['realizationData'] = $data_realizacao_servico;  
+            $values['id'] = $$schedulingId;   
                     
             $sql->execute($values);
 
-            $lastId = $conexao->lastInsertId();
-
-            $stmt = $conexao->prepare("SELECT * FROM CLIENTE_SOLICITA_SERVICO WHERE id = :id");
-            $stmt->execute([':id' => $lastId]);
-
-            $conexao->commit();
-
-            return $stmt->fetchAll();
+            return $sql->rowCount();
 
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);

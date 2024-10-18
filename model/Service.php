@@ -29,6 +29,32 @@ class Service {
         }
     }
 
+     /*
+    Retorna as informações dos serviços ofertados pelo guincheiro (prestador de serviço)
+    */ 
+    public static function getService($id) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT
+                    id,
+                    codigo,
+                    tipo, 
+                    preco,
+                    active
+                FROM SERVICOS
+                WHERE id = :id");
+
+            $values['id'] = $id;
+
+            $sql->execute($values);
+            
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e->getMessage()]);
+        }
+    }
+
     /* 
     Cria um novo serviço
     */
@@ -126,5 +152,28 @@ class Service {
             output(500, ["msg" => $e->getMessage()]);
         }
     }
+
+    /* 
+    seta um serviço ativo
+    */
+    public static function setServiceAsActive($serviceId) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "UPDATE SERVICOS SET
+                    active = TRUE,
+                    updated_at = NOW()
+                WHERE id = :serviceId");
+
+            $values['serviceId'] = $serviceId;
+
+            $sql->execute();
+
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e->getMessage()]);
+        }
+    }
+
 
 }

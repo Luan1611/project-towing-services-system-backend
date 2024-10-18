@@ -74,7 +74,6 @@ if (method("POST")) {
         );
 
         if (!$result) {
-            // Houve algum erro inesperado no servidor.
             throw new Exception("Não foi possível cadastrar o agendamento", 500);
         }
         // Teremos que retornar os dados do novo agendamento em caso de sucesso?
@@ -87,20 +86,15 @@ if (method("POST")) {
 if(method("DELETE")) {
     // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
-        // Não recebeu, então recebe os dados via corpo normal do POST.
-        $data = $_GET;
+        //TODO
     }
 
     try {
-        if(!$data) {
-            throw new Exception("Nenhuma informação encontrada", 404);
-        }
-        if(!valid($data,["nome", "data_nascimento"])) {
-            throw new Exception("Nome e/ou data_nascimento não encontrados", 404);
-        }
-        if(count($data) != 2) {
-            throw new Exception("Foram enviados dados desconhecidos", 400);
-        }
+        validateParameters($data, ["id"])
+        //TODO
+        validateSchedulingId()
+
+        $result = Client::deleteScheduling($data, ["id"])
 
         output(200, ["msg" => "Usuário editado com sucesso"]);
     } catch (Exception $e) {

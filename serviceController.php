@@ -68,8 +68,6 @@ if (method("POST")) {
         validateParameters($data, ["codigo", "tipo", "preco"], 3)
         validateCode($data["codigo"])
         validateType($data["codigo"])
-
-        // questão: a variável $price armazena uma string ou já um número?
         validatePreco($data["preco"])
 
         $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
@@ -77,6 +75,7 @@ if (method("POST")) {
         if(!$result) {
             throw new Exception("Não foi possível cadastrar o serviço", 500);
         }
+        //TODO: enviar JSON
         output(200, ["msg" => "Serviço criado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
@@ -88,9 +87,18 @@ if (method("DELETE")) {
     if (!$data) {
         //TODO
     }
-    
+
     try {
-        output(200, $result);
+        validateParameters($data, ["codigo"], 1)
+        validateCode($data["codigo"])
+
+        $result = Service::deleteService($data["codigo"]);
+
+        if(!$result) {
+            throw new Exception("Não foi possível deletar o serviço", 500);
+        }
+
+        output(204, $result);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

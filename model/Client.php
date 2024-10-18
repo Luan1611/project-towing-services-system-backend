@@ -151,6 +151,8 @@ class Client {
         try {
             $conexao = Conexao::getConexao();
             
+            $conexao->beginTransaction();
+
             $sql = $conexao->prepare(
                 "INSERT INTO CLIENTE_SOLICITA_SERVICO (
                     cpf_cliente,
@@ -172,9 +174,14 @@ class Client {
                     
             $sql->execute($values);
 
-            // Neste caso, é necessário verificar quantas tuplas foram afetadas antes
-            // de qualquer return? //sim, como?
-            return $sql->fetchAll();
+            $lastId = $conexao->lastInsertId();
+
+            $stmt = $conexao->prepare("SELECT * FROM CLIENTE_SOLICITA_SERVICO WHERE id = :id");
+            $stmt->execute([':id' => $lastId]);
+
+            $conexao->commit();
+
+            return $stmt->fetchAll();
 
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);

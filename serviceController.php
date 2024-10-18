@@ -83,9 +83,9 @@ if (method("POST")) {
 }
 
 if (method("DELETE")) {
-    // considerando que o form data não suporta DELETE nem PUT, como receber dados para deleção? se eles não chegarem num JSON, como armazená-los?
+    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
-        //TODO
+        $data = $_GET;
     }
 
     try {

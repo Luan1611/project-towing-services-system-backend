@@ -45,6 +45,12 @@ private function validateServicesIds($servicesIds) {
 	}
 }
 
+private function validateSchedulingId($schedulingId){
+    if (!preg_match('/^[0-9]$/', $schedulingId)) {
+        throw new Exception("Id de agendamento Inválido", 422)
+    }
+}
+
 if (method("POST")) {
     // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
@@ -86,13 +92,12 @@ if (method("POST")) {
 if(method("DELETE")) {
     // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
-        //TODO
+        $data = $_GET;
     }
 
     try {
         validateParameters($data, ["id"])
-        //TODO
-        validateSchedulingId()
+        validateSchedulingId($data, ["id"])
 
         $result = Client::deleteScheduling($data, ["id"])
 

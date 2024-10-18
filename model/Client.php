@@ -154,28 +154,38 @@ class Client {
             $conexao->beginTransaction();
 
             $servicesIdLength = count($services_id);
-
-
             
-            $sql = $conexao->prepare(
-                "INSERT INTO CLIENTE_SOLICITA_SERVICO (
+            $stringValues = ""
+
+            $values = []
+
+            $valoresParaInserir = 4
+             0 * 4 + 1
+            for($i = 0; $i < $servicesIdLength; $i++){
+                
+                $stringValues += "
+                (
+                    :${$i * $valoresParaInserir + 1},
+                    :${$i * $valoresParaInserir + 2},
+                    :${$i * $valoresParaInserir + 3},
+                    :${$i * $valoresParaInserir + 4}
+                )"
+
+                $values[$i * $valoresParaInserir + 1] = $cpf;  
+                $values[$i * $valoresParaInserir + 2] = $services_id[$i];  
+                $values[$i * $valoresParaInserir + 3] = $data_solicitacao_servico;  
+                $values[$i * $valoresParaInserir + 4] = $data_realizacao_servico;
+            }
+
+
+            $stringSql = "INSERT INTO CLIENTE_SOLICITA_SERVICO (
                     cpf_cliente,
                     id_servico,
                     data_solicitacao_servico,
-                    data_realizacao_servico
-                ) VALUES (
-                    :clientCpf,
-                    :serviceId,
-                    :solicitationData,
-                    :realizationData
-                )"
-            );
-
-            $values['clientCpf'] = $cpf;  
-            $values['serviceId'] = $services_id;  
-            $values['solicitationData'] = $data_solicitacao_servico;  
-            $values['realizationData'] = $data_realizacao_servico;  
-                    
+                    data_realizacao_servico  VALUES ${stringValues})"
+            
+            $sql = $conexao->prepare($stringSql);
+    
             $sql->execute($values);
 
             $lastId = $conexao->lastInsertId();

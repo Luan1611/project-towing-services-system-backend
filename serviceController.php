@@ -70,7 +70,11 @@ if (method("POST")) {
         validateType($data["codigo"])
         validatePreco($data["preco"])
 
-        $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
+        if (getService($data["codigo"]) > 0) {
+            $result = Service::setServiceAsActive($data["codigo"])
+        } else {
+            $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
+        }
         
         if(!$result) {
             throw new Exception("Não foi possível cadastrar o serviço", 500);
@@ -98,7 +102,7 @@ if (method("DELETE")) {
             throw new Exception("Não foi possível deletar o serviço", 500);
         }
 
-        output(204, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);
+        output(204, ["msg" => "Serviço deletado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

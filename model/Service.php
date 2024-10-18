@@ -29,23 +29,22 @@ class Service {
         }
     }
 
-     /*
+    /*
     Retorna as informações dos serviços ofertados pelo guincheiro (prestador de serviço)
     */ 
-    public static function getService($id) {
+    public static function getService($code) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
                 "SELECT
-                    id,
                     codigo,
                     tipo, 
                     preco,
                     active
                 FROM SERVICOS
-                WHERE id = :id");
+                WHERE codigo = :codigo");
 
-            $values['id'] = $id;
+            $values['codigo'] = $code;
 
             $sql->execute($values);
             
@@ -62,7 +61,7 @@ class Service {
     //TODO: se eu tenho um serviço armazenado cujo valor do ACTIVE seja false,
     // e tento criar um serviço novo idêntico, eu preciso apenas atualizar a
     // coluna ACTIVE do serviço inativado para true?
-    public static function createService($codigo, $tipo, $preco) {
+    public static function createService($code, $type, $price) {
         try {
             $conexao = Conexao::getConexao();
 
@@ -85,9 +84,9 @@ class Service {
                     TRUE
                     )");
 
-            $values['codigo'] = $codigo;
-            $values['tipo'] = $tipo;
-            $values['preco'] = $preco;
+            $values['codigo'] = $code;
+            $values['tipo'] = $type;
+            $values['preco'] = $price;
                     
             $sql->execute($values);
 
@@ -156,20 +155,20 @@ class Service {
     /* 
     seta um serviço ativo
     */
-    public static function setServiceAsActive($serviceId) {
+    public static function setServiceAsActive($serviceCode) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
                 "UPDATE SERVICOS SET
                     active = TRUE,
                     updated_at = NOW()
-                WHERE id = :serviceId");
+                WHERE codigo = :codigo");
 
-            $values['serviceId'] = $serviceId;
+            $values['codigo'] = $serviceCode;
 
             $sql->execute();
 
-            return $sql->fetchAll();
+            return $sql->rowCount();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }

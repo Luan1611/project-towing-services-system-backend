@@ -153,6 +153,10 @@ class Client {
             
             $conexao->beginTransaction();
 
+            $servicesIdLength = count($services_id);
+
+
+            
             $sql = $conexao->prepare(
                 "INSERT INTO CLIENTE_SOLICITA_SERVICO (
                     cpf_cliente,
@@ -201,7 +205,7 @@ class Client {
                 WHERE id = :id"
             );
 
-            $values['id'] = $$schedulingId;   
+            $values['id'] = $schedulingId;
                     
             $sql->execute($values);
 

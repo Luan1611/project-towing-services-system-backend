@@ -31,7 +31,6 @@ if(method("GET")) {
             output(204, ["msg" => "Não há agendamentos para serem exibidos"]);
         }
         
-        //TODO: retornar JSON
         output(200, $schedulingsList);
     } catch (Exception $e) {
         throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);

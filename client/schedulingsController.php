@@ -75,7 +75,7 @@ if (method("POST")) {
 
         if (!$result) {
             // Houve algum erro inesperado no servidor.
-            throw new Exception("Erro de servidor", 500);
+            throw new Exception("Não foi possível cadastrar o agendamento", 500);
         }
         // Teremos que retornar os dados do novo agendamento em caso de sucesso?
         output(200, $result);

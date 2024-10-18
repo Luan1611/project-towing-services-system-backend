@@ -75,8 +75,8 @@ if (method("POST")) {
         if(!$result) {
             throw new Exception("Não foi possível cadastrar o serviço", 500);
         }
-        //TODO: enviar JSON
-        output(200, ["msg" => "Serviço criado com sucesso!"]);
+
+        output(200, $result);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
@@ -98,7 +98,7 @@ if (method("DELETE")) {
             throw new Exception("Não foi possível deletar o serviço", 500);
         }
 
-        output(204, $result);
+        output(204, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

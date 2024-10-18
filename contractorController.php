@@ -57,8 +57,7 @@ if(method("DELETE")) {
         validateCPFs($data["cpfs"])
         validateDate($data["date"])
 
-        //TODO: retornar JSON
-        output(200, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);
+        output(204, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

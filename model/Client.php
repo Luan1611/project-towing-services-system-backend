@@ -190,7 +190,7 @@ class Client {
 
             $conexao->commit();
 
-            return ["msg" => "agendamento concluido com sucesso"];
+            return $sql->rowCount();
 
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);

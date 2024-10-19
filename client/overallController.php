@@ -43,18 +43,18 @@ if (method("POST")) {
     }
 
     try {
-        validateParameters($data, ["cpf", "nome", "telefone"], 3)
+        validateParameters($data, ["cpf", "nome", "telefone", "email", "senha"], 5)
         validateName($data["nome"])
         validatePhoneNumber($data["telefone"])
         validateCPF($data["cpf"])
 
-        $result = Client::createScheduling($data["cpf"], $data["nome"], $data["telefone"]);
-        // Você pode configurar para o método retornar false ou similar caso haja erro ou problema...
+        //TODO: Perguntar para Prof. se é melhor o createAccount estar em Authentication ou em Client mesmo
+        $result = Client::createAccount($data["email"], $data["senha"], $data["cpf"], $data["nome"], $data["telefone"]);
+
         if (!$result) {
-            // Houve algum erro inesperado no servidor.
-            throw new Exception("Não foi possível cadastrar o agendamento", 500);
+            throw new Exception("Não foi possível realizar o cadastro", 500);
         }
-        // Deu tudo certo, retorna o resultado da operação. A mensagem e o código HTTP podem variar conforme a necessidade
+
         output(200, ["msg" => "Agendamento criado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);

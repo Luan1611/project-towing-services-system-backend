@@ -57,10 +57,6 @@ class Service {
     /* 
     Cria um novo serviço
     */
-
-    //TODO: se eu tenho um serviço armazenado cujo valor do ACTIVE seja false,
-    // e tento criar um serviço novo idêntico, eu preciso apenas atualizar a
-    // coluna ACTIVE do serviço inativado para true?
     public static function createService($code, $type, $price) {
         try {
             $conexao = Conexao::getConexao();
@@ -153,7 +149,7 @@ class Service {
     }
 
     /* 
-    seta um serviço ativo
+    Seta um serviço para ACTIVE
     */
     public static function setServiceAsActive($serviceCode) {
         try {
@@ -173,6 +169,5 @@ class Service {
             output(500, ["msg" => $e->getMessage()]);
         }
     }
-
 
 }

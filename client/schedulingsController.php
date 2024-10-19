@@ -82,7 +82,7 @@ if (method("POST")) {
         if (!$result) {
             throw new Exception("Não foi possível cadastrar o agendamento", 500);
         }
-        // Teremos que retornar os dados do novo agendamento em caso de sucesso?
+
         output(200, $result);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
@@ -101,7 +101,7 @@ if(method("DELETE")) {
 
         $result = Client::deleteScheduling($data, ["id"])
 
-        output(200, ["msg" => "Usuário editado com sucesso"]);
+        output(200, ["msg" => "Agendamento deletado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

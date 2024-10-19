@@ -35,6 +35,26 @@ private function validatePhoneNumber($phoneNumber) {
     }
 }
 
+if(method("GET")) {
+    if (!$data) {
+        $data = $_GET;
+    }
+
+    try {
+        validateCPF($data["cpf"])
+        
+        if($data["cpf"]){
+            $client = Client::getClientData($data["cpf"])
+            output(200, $client);
+        }
+
+        output(204, ["msg" => "Não há cliente com o cpf informado"]);
+
+    } catch (Exception $e) {
+        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);
+    }
+}
+
 if (method("POST")) {
     if (!$data) {
         $data = $_POST;

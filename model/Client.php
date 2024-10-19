@@ -28,6 +28,29 @@ class Client {
         }
     }
 
+    public static function getClientData($cpf) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT 
+                    c.cpf, 
+                    c.nome, 
+                    c.telefone,
+                    ca.email
+                FROM cliente c
+                INNER JOIN auth ca 
+                    ON ca.user_id = c.cpf
+                WHERE c.cpf = :cpf");
+
+            $values['cpf'] = $cpf
+            
+            $sql->execute($values);
+
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e-getMessage()]);
+        }
+    }
 
     /*
     Obtém os dados dos agendamentos de determinado cliente.

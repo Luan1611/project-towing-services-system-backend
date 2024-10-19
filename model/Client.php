@@ -188,17 +188,12 @@ class Client {
     
             $sql->execute($values);
 
-            $lastId = $conexao->lastInsertId();
-
-            $stmt = $conexao->prepare("SELECT * FROM CLIENTE_SOLICITA_SERVICO WHERE id = :id");
-            $stmt->execute([':id' => $lastId]);
-
             $conexao->commit();
 
-            return $stmt->fetchAll();
+            return ["msg" => "agendamento concluido com sucesso"];
 
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 

@@ -5,6 +5,27 @@ require_once(__DIR__ . "/../configs/Database.php");
 require_once(__DIR__ . "/../configs/utils.php");
 
 class Service {
+    public static function checkIfExists($code) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT
+                    EXISTS(
+                    SELECT
+                        codigo
+                    FROM SERVICOS
+                    WHERE codigo = :code
+                    )");
+
+            $values["code"] = $code
+
+            $sql->execute($values);
+            
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e->getMessage()]);
+        }
+    }
 
     /*
     Retorna as informações dos serviços ofertados pelo guincheiro (prestador de serviço)

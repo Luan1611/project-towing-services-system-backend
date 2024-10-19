@@ -6,6 +6,29 @@ require_once(__DIR__ . "/../configs/utils.php");
 
 class Client {
 
+    public static function checkClientExistance($cpf) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT
+                    EXISTS(
+                    SELECT
+                        cpf
+                    FROM CLIENTES
+                    WHERE cpf = :cpf
+                    )");
+
+            $values["cpf"] = $cpf
+
+            $sql->execute($values);
+
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e-getMessage()]);
+        }
+    }
+
+
     /*
     Obtém os dados dos agendamentos de determinado cliente.
     Tais dados serão carregados na página "Meus Agendamentos" do cliente.
@@ -25,7 +48,7 @@ class Client {
                 WHERE css.cpf_cliente = :cpf");
 
             $values['cpf'] = $cpf
-            //TODO: reformular string de consulta
+            
             $sql->execute($values);
 
             return $sql->fetchAll();

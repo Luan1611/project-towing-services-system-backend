@@ -155,8 +155,6 @@ class Client {
 
             $sqlClient->execute($valuesClient);
 
-            // Neste caso, é necessário verificar quantas tuplas foram afetadas antes
-            // de qualquer return? Não, não vamos renderizar nada na tela.
             $conexao->commit();
 
             return TRUE;
@@ -172,13 +170,10 @@ class Client {
     public static function createScheduling($cpf, $services_id, $data_solicitacao_servico, $data_realizacao_servico) {
         try {
             $conexao = Conexao::getConexao();
-            
-            $conexao->beginTransaction();
 
             $servicesIdLength = count($services_id);
             
             $stringValues = []
-
             $values = []
 
             $valoresParaInserir = 4
@@ -210,10 +205,7 @@ class Client {
                     data_realizacao_servico  VALUES ${$finalString})"
             
             $sql = $conexao->prepare($stringSql);
-    
             $sql->execute($values);
-
-            $conexao->commit();
 
             return $sql->rowCount();
 

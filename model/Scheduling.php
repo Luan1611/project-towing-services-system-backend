@@ -5,6 +5,28 @@ require_once(__DIR__ . "/../configs/Database.php");
 require_once(__DIR__ . "/../configs/utils.php");
 
 class Scheduling {
+
+    public static function checkIfExists($ids) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT
+                    EXISTS(
+                    SELECT
+                        id
+                    FROM CLIENTE_SOLICITA_SERVICO
+                    WHERE id IN(:id)
+                    )");
+
+            $values["id"] = $ids
+
+            $sql->execute($values);
+            
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e->getMessage()]);
+        }
+    }
     
     /*
     Obtém os dados que serão carregados no site para os visitantes (usuários não logados)

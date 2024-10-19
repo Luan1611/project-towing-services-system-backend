@@ -5,3 +5,5 @@ CREATE TABLE AUTH (
     classe_de_acesso INT NOT NULL
     CHECK (user_id REGEXP '^[0-9]{11,14}$')
 )
+
+/* user_id é o CPF do Cliente ou o CNPJ do prestador */

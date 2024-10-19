@@ -14,10 +14,32 @@ class Service {
                     SELECT
                         codigo
                     FROM SERVICOS
-                    WHERE codigo = :code
+                    WHERE codigo IN(:code)
                     )");
 
             $values["code"] = $code
+
+            $sql->execute($values);
+            
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e->getMessage()]);
+        }
+    }
+
+    public static function checkIfIdsExists($ids) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT
+                    EXISTS(
+                    SELECT
+                        id
+                    FROM SERVICOS
+                    WHERE id IN(:ids)
+                    )");
+
+            $values["ids"] = $ids
 
             $sql->execute($values);
             

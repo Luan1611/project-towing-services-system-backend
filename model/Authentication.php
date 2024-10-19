@@ -5,6 +5,28 @@ require_once(__DIR__ . "/../configs/Database.php");
 require_once(__DIR__ . "/../configs/utils.php");
 
 class Authentication {
+
+    public static function checkIfExists($emails) {
+        try {
+            $conexao = Conexao::getConexao();
+            $sql = $conexao->prepare(
+                "SELECT
+                    EXISTS(
+                    SELECT
+                        email
+                    FROM AUTH
+                    WHERE email IN(:email)
+                    )");
+
+            $values["email"] = $emails
+
+            $sql->execute($values);
+
+            return $sql->fetchAll();
+        } catch (Exception $e) {
+            output(500, ["msg" => $e-getMessage()]);
+        }
+    }
     
     /*
     Retorna os dados cadastrais do usuário (client ou prestador de serviço), a partir

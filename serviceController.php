@@ -19,8 +19,9 @@ private function validateCode($code) {
     }
 }
 
+//Faz uma chamada para o Model verificar se já existe o código no BD
 private function checkIfCodeExists($code) {
-    
+    return Service::checkIfExists($code)["EXISTS"]
 }
 
 // Verifica se o tipo é composto por no mínimo 1 e no máximo 50 caracteres
@@ -67,7 +68,7 @@ if (method("POST")) {
         validateParameters($data, ["codigo", "tipo", "preco"], 3)
         validateCode($data["codigo"])
         validateType($data["codigo"])
-        validatePreco($data["preco"])
+        validatePrice($data["preco"])
 
         if (!empty(getService($data["codigo"]))) {
             $result = Service::setServiceAsActive($data["codigo"])
@@ -94,11 +95,13 @@ if (method("DELETE")) {
         validateParameters($data, ["codigo"], 1)
         validateCode($data["codigo"])
 
-
+        if (!checkIfCodeExists($data["codigo"])) {
+            throw new Exception("O serviço cuja deleção foi solicitada não existe no sistema", 404);
+        }
         $result = Service::deleteService($data["codigo"]);
 
         if(!$result) {
-            output(204, ["msg" => "O serviço cuja deleção foi solicitada não existe no sistema"]);
+            output(204, ["msg" => "Nenhum serviço foi deletado"]);
         }
 
         output(204, ["msg" => "Serviço deletado com sucesso!"]);

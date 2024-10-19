@@ -18,7 +18,6 @@ $data = handleJSONInput();
 
 if(method("GET")) {
     if (!$data) {
-        // Não recebeu, então recebe os dados via corpo normal do GET.
         $data = $_GET;
     }
 

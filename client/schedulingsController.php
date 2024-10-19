@@ -32,46 +32,49 @@ private function validateName($name) {
     }
 }
 
-//$servicesId deve ser um array indexado
 private function validateServicesIds($servicesIds) {
     $servicesIdsArrayLength = count(servicesIds)
     if (!$servicesIdsArrayLength) {
         throw new Exception("Ids dos serviços não encontrados", 400)
     }
     foreach ($servicesIds as $serviceId) {
-		if (!is_int($serviceId)) {
+		if (!is_int($serviceId) || $serviceId <= 0) {
             throw new Exception("Id(s) com formato inválido", 400)
         }
 	}
 }
 
-private function validateSchedulingId($schedulingId){
+private function validateSchedulingId($schedulingId) {
     if (!preg_match('/^[0-9]$/', $schedulingId)) {
         throw new Exception("Id de agendamento Inválido", 422)
     }
 }
 
 if (method("POST")) {
-    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
-        // Não recebeu, então recebe os dados via corpo normal do POST.
         $data = $_POST;
     }
 
-    // 'services_ids' tem que ser um array (de números inteiros)
     try {
         validateParameters(
             $data,
             ["cpf", "services_ids", "data_solicitacao_servico", "data_realizacao_servico"],
             3
         )
-        validateCPF($data["cpf"])
-        validateDate($data["data_solicitacao_servico"])
-        validateDate($data["data_realizacao_servico"])
+        validateCPF($data["cpf"]);
+        validateDate($data["data_solicitacao_servico"]);
+        validateDate($data["data_realizacao_servico"]);
 
-        validateServicesIds("services_ids")
+        validateServicesIds($data["services_ids"]);
+        
+        if (!Client::checkIfExists($data["cpf"])["EXISTS"]) {
+            throw new Exception("Agendamento não criado, pois o CPF solicitante para tal agendamento não existe", 422);
+        }
 
-        //services_id tem que ser um array com os ids dos serviços solicitados
+        if (!Services::checkIfIdsExists($data["services_ids"])["EXISTS"]) {
+            throw new Exception("Agendamento não criado, pois o(s) Id(s) do(s) serviços(s)informado(s) para tal agendamento não existe/existem)", 422);
+        }
+
         $result = Client::createScheduling(
             $data["cpf"],
             $data["services_ids"],
@@ -80,7 +83,7 @@ if (method("POST")) {
         );
 
         if (!$result) {
-            throw new Exception("Não foi possível cadastrar o agendamento", 500);
+            throw new Exception("Agendamento não criado, em razão de algum erro do servidor. Entre em contato com suporte", 500);
         }
 
         output(200, $result);
@@ -90,7 +93,6 @@ if (method("POST")) {
 }
 
 if(method("DELETE")) {
-    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
         $data = $_GET;
     }
@@ -98,6 +100,10 @@ if(method("DELETE")) {
     try {
         validateParameters($data, ["id"])
         validateSchedulingId($data, ["id"])
+
+        if (!Scheduling::checkIfIdsExists($data["id"])["EXISTS"]) {
+            throw new Exception("Agendamento não deletado, pois o Id do agendamento para tal deleção não existe)", 422);
+        }
 
         $result = Client::deleteScheduling($data, ["id"])
 

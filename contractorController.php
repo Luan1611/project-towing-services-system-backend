@@ -45,7 +45,6 @@ if(method("GET")) {
 }
 
 if(method("DELETE")) {
-    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
         $data = $_GET;
     }

@@ -6,7 +6,7 @@ require_once(__DIR__ . "/../configs/utils.php");
 
 class Client {
 
-    public static function checkClientExistance($cpf) {
+    public static function checkIfExists($cpfs) {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
@@ -15,10 +15,10 @@ class Client {
                     SELECT
                         cpf
                     FROM CLIENTES
-                    WHERE cpf = :cpf
+                    WHERE cpf IN(:cpf)
                     )");
 
-            $values["cpf"] = $cpf
+            $values["cpf"] = $cpfs
 
             $sql->execute($values);
 

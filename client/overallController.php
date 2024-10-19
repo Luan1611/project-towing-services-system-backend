@@ -36,9 +36,7 @@ private function validatePhoneNumber($phoneNumber) {
 }
 
 if (method("POST")) {
-    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
-        // Não recebeu, então recebe os dados via corpo normal do POST.
         $data = $_POST;
     }
 
@@ -48,7 +46,15 @@ if (method("POST")) {
         validatePhoneNumber($data["telefone"])
         validateCPF($data["cpf"])
 
-        //TODO: Perguntar para Prof. se é melhor o createAccount estar em Authentication ou em Client mesmo
+        
+        if (Client::checkIfExists($data["cpf"])) {
+            throw new Exception("O CPF já existe. Cadastro não realizado.", 404);
+        }
+
+        if (Authentication::checkIfExists($data["email"])) {
+            throw new Exception("O e-mail já existe. Cadastro não realizado.", 404);
+        }
+
         $result = Client::createAccount($data["email"], $data["senha"], $data["cpf"], $data["nome"], $data["telefone"]);
 
         if (!$result) {
@@ -61,7 +67,6 @@ if (method("POST")) {
     }
 }
 
-// Como ficaria depois, com o token?
 if(method("PUT")) {
 
     if (!$data) {
@@ -69,17 +74,10 @@ if(method("PUT")) {
     }
 
     try {
-        // Faz validações básicas de parâmetros
         validateParameters($_GET, ["cpf"], 1);
         validateParameters($data, ["nome", "telefone"], 2);
-
-        // Verifica se o nome é válido
         validateName($data["nome"]);
-
-        // Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
         validatePhoneNumber($data["telefone"]);
-
-        // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
         validateCPF($data["cpf"]);
 
         // Verifica se o cpf do cliente está armazenado na base de dados

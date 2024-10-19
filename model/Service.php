@@ -142,7 +142,7 @@ class Service {
 
             $sql->execute();
 
-            return $sql->fetchAll();
+            return $sql->rowCount();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }

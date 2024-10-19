@@ -19,6 +19,10 @@ private function validateCode($code) {
     }
 }
 
+private function checkIfCodeExists($code) {
+    
+}
+
 // Verifica se o tipo é composto por no mínimo 1 e no máximo 50 caracteres
 private function validateType($type) {
     $trimmedType = trim($type)
@@ -37,7 +41,6 @@ private function validatePrice($price) {
 
 if(method("GET")) {
     if (!$data) {
-        // Não recebeu, então recebe os dados via corpo normal do GET.
         $data = $_GET;
     }
 
@@ -57,7 +60,6 @@ if(method("GET")) {
 
 if (method("POST")) {
     if (!$data) {
-        // Não recebeu, então recebe os dados via corpo normal do POST.
         $data = $_POST;
     }
 
@@ -67,7 +69,7 @@ if (method("POST")) {
         validateType($data["codigo"])
         validatePreco($data["preco"])
 
-        if (getService($data["codigo"]) > 0) {
+        if (!empty(getService($data["codigo"]))) {
             $result = Service::setServiceAsActive($data["codigo"])
         } else {
             $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
@@ -84,7 +86,6 @@ if (method("POST")) {
 }
 
 if (method("DELETE")) {
-    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
         $data = $_GET;
     }
@@ -93,10 +94,11 @@ if (method("DELETE")) {
         validateParameters($data, ["codigo"], 1)
         validateCode($data["codigo"])
 
+
         $result = Service::deleteService($data["codigo"]);
 
         if(!$result) {
-            throw new Exception("Não foi possível deletar o serviço", 500);
+            output(204, ["msg" => "O serviço cuja deleção foi solicitada não existe no sistema"]);
         }
 
         output(204, ["msg" => "Serviço deletado com sucesso!"]);

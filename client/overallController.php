@@ -65,21 +65,22 @@ if (method("POST")) {
 if(method("PUT")) {
 
     if (!$data) {
-        $data = $_GET;
+        $data = $_POST;
     }
 
     try {
         // Faz validações básicas de parâmetros
-        validateParameters($data, ["cpf", "nome", "telefone"], 3)
+        validateParameters($_GET, ["cpf"], 1);
+        validateParameters($data, ["nome", "telefone"], 2);
 
         // Verifica se o nome é válido
-        validateName($data["nome"])
+        validateName($data["nome"]);
 
         // Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
-        validatePhoneNumber($data["telefone"])
+        validatePhoneNumber($data["telefone"]);
 
         // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
-        validateCPF($data["cpf"])
+        validateCPF($data["cpf"]);
 
         // Verifica se o cpf do cliente está armazenado na base de dados
         if(!Client::checkIfExists($data["cpf"])) {

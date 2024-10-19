@@ -37,11 +37,14 @@ class Contractor {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                //TODO
+                "UPDATE CLIENTE_SOLICITA_SERVICO SET ACTIVE = FALSE WHERE cpf_cliente IN (:clientsCPF) AND data_realizacao_servico = :date"
             );
-            $sql->execute();
+            $values["clientsCPF"] = $clientsCPF
+            $values["date"] = $date
 
-            return $sql->fetchAll();
+            $sql->execute($values);
+
+            return $sql->rowCount();
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);
         }

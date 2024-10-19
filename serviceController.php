@@ -35,8 +35,6 @@ private function validatePrice($price) {
     }
 }
 
-// Quais verificações realizar para obter todos os servicos para o prestador de servicos?
-// parte de autenticação?
 if(method("GET")) {
     if (!$data) {
         // Não recebeu, então recebe os dados via corpo normal do GET.
@@ -58,7 +56,6 @@ if(method("GET")) {
 }
 
 if (method("POST")) {
-    // Checa se o servidor receber algum dado JSON de entrada.
     if (!$data) {
         // Não recebeu, então recebe os dados via corpo normal do POST.
         $data = $_POST;

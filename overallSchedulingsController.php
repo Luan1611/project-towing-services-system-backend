@@ -16,7 +16,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Caso não tenha sido enviado nada no formato JSON, retorna FALSE.
 $data = handleJSONInput();
 
-// Listar algo.
 if(method("GET")) {
     if (!$data) {
         // Não recebeu, então recebe os dados via corpo normal do GET.

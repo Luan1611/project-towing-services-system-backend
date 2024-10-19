@@ -61,7 +61,7 @@ class Service {
         try {
             $conexao = Conexao::getConexao();
 
-            $conexao->beginTransaction();
+            // $conexao->beginTransaction();
 
             $sql = $conexao->prepare(
                 "INSERT INTO SERVICOS(
@@ -91,7 +91,7 @@ class Service {
             $stmt = $conexao->prepare("SELECT * FROM SERVICOS WHERE id = :id");
             $stmt->execute([':id' => $lastId]);
 
-            $conexao->commit();
+            // $conexao->commit();
 
             return $stmt->fetchAll();
         } catch (Exception $e) {

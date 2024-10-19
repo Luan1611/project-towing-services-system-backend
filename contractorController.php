@@ -28,7 +28,6 @@ private function validateCPFs($cpfsArray) {
 // Lista todos os agendamentos de serviços solicitados pelos clientes, por data
 if(method("GET")) {
     if (!$data) {
-        // Não recebeu, então recebe os dados via corpo normal do GET.
         $data = $_GET;
     }
 
@@ -55,6 +54,12 @@ if(method("DELETE")) {
         validateParameters($data, ["cpfs", "date"], 2)
         validateCPFs($data["cpfs"])
         validateDate($data["date"])
+
+        $result = deleteClientsServicesSchedulingsByDate($data["cpfs"], $data["date"])
+
+        if (!$result) {
+            throw new Exception("Não foi possível deletar os agendamentos dos clientes", 500)
+        }
 
         output(204, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);
     } catch (Exception $e) {

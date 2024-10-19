@@ -104,14 +104,13 @@ class Client {
                     :email,
                     :senha,
                     :userId,
-                    :classeDeAcesso
+                    1
                 )"
             );
             
             $values['email'] = $email;  
             $values['senha'] = $password;  
-            $values['userId'] = $cpf;  
-            $values['classeDeAcesso'] = 1;  
+            $values['userId'] = $cpf; 
                     
             $sql->execute($values);
 
@@ -155,7 +154,7 @@ class Client {
 
             $servicesIdLength = count($services_id);
             
-            $stringValues = ""
+            $stringValues = []
 
             $values = []
 
@@ -163,26 +162,29 @@ class Client {
              0 * 4 + 1
             for($i = 0; $i < $servicesIdLength; $i++){
                 
-                $stringValues += "
-                (
+                $string = "(
                     :${$i * $valoresParaInserir + 1},
                     :${$i * $valoresParaInserir + 2},
                     :${$i * $valoresParaInserir + 3},
                     :${$i * $valoresParaInserir + 4}
                 )"
 
+                array_push($stringValues, $string)
+                
                 $values[$i * $valoresParaInserir + 1] = $cpf;  
                 $values[$i * $valoresParaInserir + 2] = $services_id[$i];  
                 $values[$i * $valoresParaInserir + 3] = $data_solicitacao_servico;  
                 $values[$i * $valoresParaInserir + 4] = $data_realizacao_servico;
             }
 
+            $finalString = implode($stringValues, ",")
+
 
             $stringSql = "INSERT INTO CLIENTE_SOLICITA_SERVICO (
                     cpf_cliente,
                     id_servico,
                     data_solicitacao_servico,
-                    data_realizacao_servico  VALUES ${stringValues})"
+                    data_realizacao_servico  VALUES ${$finalString})"
             
             $sql = $conexao->prepare($stringSql);
     

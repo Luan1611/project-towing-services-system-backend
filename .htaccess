@@ -1,11 +1,13 @@
 Options +FollowSymLinks
 RewriteEngine On
 
+#TODO TESTAR
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # Este trecho abaixo configura o servidor para aceitar requisicoes
 # tipo /exemplo/10 ou /exemplo ou /exemplo?chave=valor, etc...
 # Fazer isso para cada arquivo de rota disponível no servidor.
-RewriteRule ^exemplo/([0-9]+) exemplo.php?id=$1 [L,QSA]
-RewriteRule ^exemplo exemplo.php [L,QSA]
+RewriteRule ^service/([0-9]+) serviceController.php?id=$1 [L,QSA]
+RewriteRule ^service/([a-z]+) serviceController.php?query=$1 [L,QSA]
+RewriteRule ^service serviceController.php [L,QSA]

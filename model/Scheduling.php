@@ -17,13 +17,13 @@ class Scheduling {
                         id
                     FROM CLIENTE_SOLICITA_SERVICO
                     WHERE id IN(:id)
-                    )");
+                    ) AS scheduling_exists");
 
             $values["id"] = $ids;
 
             $sql->execute($values);
             
-            return $sql->fetchAll();
+            return $sql->fetchA();
 
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);

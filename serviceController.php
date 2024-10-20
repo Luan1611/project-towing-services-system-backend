@@ -21,7 +21,7 @@ function validateCode($code) {
 
 //Faz uma chamada para o Model verificar se já existe o código no BD
 function checkIfCodeExists($code) {
-    return Service::checkIfExists($code)["EXISTS"];
+    return Service::checkIfExists($code)["service_exists"];
 }
 
 // Verifica se o tipo é composto por no mínimo 1 e no máximo 50 caracteres
@@ -35,7 +35,7 @@ function validateType($type) {
 // Verifica se o preço é composto por, no máximo, 10 algarismos (sendo decimal ou inteiro),
 // e se há apenas caracteres de 0 a 9 na string, aceitando um único ponto opcional
 function validatePrice($price) {
-    if (preg_match('/^\d+(\.\d+)?$/', $valor) && strlen(str_replace('.', '', $valor)) <= 10) {
+    if (!preg_match('/^\d+(\.\d+)?$/', $price) && !strlen(str_replace('.', '', $price)) <= 10) {
         throw new Exception("O preço do serviço é inválido", 406);
     }
 }
@@ -77,7 +77,7 @@ if (method("POST")) {
         }
         
         if(!$result) {
-            throw new Exception("Não foi possível cadastrar o serviço", 500);
+            throw new Exception("O serviço já foi cadastrado ou já está ativo", 500);
         }
 
         output(200, $result);
@@ -87,9 +87,10 @@ if (method("POST")) {
 }
 
 if (method("DELETE")) {
-    if (!$data) {
-        $data = $_GET;
+    if ($data) {
+        output(500, ["msg" => "Metodo DELETE não aceita dados contidos no corpo da requisição (body)"]);
     }
+    $data = $_GET;
 
     try {
         validateParameters($data, ["codigo"], 1);

@@ -3,10 +3,11 @@
 // Faz validações básicas de parâmetros
 function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
     if (!valid($data, $arrayNamesAttributes)) {
-        throw new Exception("Parâmetro(s) incorreto(s)", 400);
+        var_dump($arrayNamesAttributes);
+        throw new Exception("Parametro(s) incorreto(s)", 400);
     }
     if (count($data) != $inputsNumber) {
-        throw new Exception("Quantidade de parâmetros inválida", 406);
+        throw new Exception("Quantidade de parametros inválida", 406);
     }
 }
 
@@ -47,6 +48,8 @@ function valid($metodo, $lista) {
         }
         return true;
     }
+    var_dump($metodo);
+    var_dump($lista);
     return false;
 }
 

@@ -10,19 +10,18 @@ class Service {
             $conexao = Conexao::getConexao();
 
             $sql = $conexao->prepare(
-                "SELECT
-                    EXISTS(
+                "SELECT EXISTS(
                     SELECT
                         codigo
                     FROM SERVICOS
                     WHERE codigo IN(:code)
-                    )");
+                    ) AS service_exists");
 
             $values["code"] = $code;
 
             $sql->execute($values);
-            
-            return $sql->fetchAll();
+
+            return $sql->fetch();
 
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
@@ -40,13 +39,13 @@ class Service {
                         id
                     FROM SERVICOS
                     WHERE id IN(:ids)
-                    )");
+                    ) AS services_ids_exists");
 
             $values["ids"] = $ids;
 
             $sql->execute($values);
             
-            return $sql->fetchAll();
+            return $sql->fetch();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }
@@ -201,6 +200,7 @@ class Service {
     Seta um serviço para ACTIVE
     */
     public static function setServiceAsActive($serviceCode) {
+
         try {
             $conexao = Conexao::getConexao();
             
@@ -208,7 +208,7 @@ class Service {
                 "UPDATE SERVICOS SET
                     active = TRUE,
                     updated_at = NOW()
-                WHERE codigo = :codigo");
+                WHERE codigo like '%:codigo%'");
 
             $values['codigo'] = $serviceCode;
 

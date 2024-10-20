@@ -10,19 +10,14 @@ class Client {
         try {
             $conexao = Conexao::getConexao();
             $sql = $conexao->prepare(
-                "SELECT
-                    EXISTS(
-                    SELECT
-                        cpf
-                    FROM CLIENTES
-                    WHERE cpf IN(:cpf)
-                    )");
+                "SELECT 
+                    EXISTS (SELECT cpf FROM CLIENTES WHERE cpf IN(:cpf)) AS cpf_exists");
 
             $values["cpf"] = $cpfs;
 
             $sql->execute($values);
 
-            return $sql->fetchAll();
+            return $sql->fetch();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }
@@ -117,11 +112,11 @@ class Client {
             $sql = $conexao->prepare(
                 "UPDATE CLIENTES SET
                     nome = :nome,
-                    tel = :tel
+                    telefone = :telefone
                 WHERE cpf = :cpf");
 
-            $values['nome'] = $nome;
-            $values['tel'] = $tel;
+            $values['nome'] = $name;
+            $values['telefone'] = $phone;
             $values['cpf'] = $cpf;
 
             //TODO: checar quantas tuplas foram afetadas e condicionar o return
@@ -129,7 +124,7 @@ class Client {
                     
             $sql->execute($values);
 
-            return $sql->fetchAll();
+            return $sql->rowCount();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }
@@ -168,16 +163,16 @@ class Client {
                 "INSERT INTO CLIENTES (
                     nome,
                     cpf,
-                    tel
+                    telefone
                 ) VALUES (
                     :nome,
                     :cpf,
-                    :tel
+                    :telefone
                 )"
             );
 
-            $valuesClient['nome'] = $email;  
-            $valuesClient['tel'] = $password;  
+            $valuesClient['nome'] = $name;  
+            $valuesClient['telefone'] = $phone;  
             $valuesClient['cpf'] = $cpf;
 
             $sqlClient->execute($valuesClient);

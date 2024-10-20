@@ -4,6 +4,8 @@
 require_once(__DIR__ . "/configs/utils.php");
 // Arquivos com as entidades (models) que vão ser usadas nesta rota.
 require_once(__DIR__ . "/model/Client.php");
+require_once(__DIR__ . "/model/Authentication.php");
+
 
 // Bloco de código configurando o servidor. Remover os métodos que não forem suportados.
 header("Access-Control-Max-Age: 3600");
@@ -19,7 +21,7 @@ $data = handleJSONInput();
 // Verifica se o nome é um nome válido
 function validateName($name) {
     $nameTrimmed = trim($name);
-    $trimmedNameLength = strlen(nameTrimmed);
+    $trimmedNameLength = strlen($nameTrimmed);
     $nameContainsNumericValues = preg_match('/[0-9]/', $name);
     $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name);
 
@@ -51,7 +53,7 @@ if(method("GET")) {
         output(200, ["msg" => "Não há cliente com o cpf informado"]);
 
     } catch (Exception $e) {
-        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);
+        output($e->getCode(), ["msg" => $e->getMessage()] );
     }
 }
 
@@ -67,11 +69,11 @@ if (method("POST")) {
         validateCPF($data["cpf"]);
 
         
-        if (Client::checkIfExists($data["cpf"])) {
+        if (Client::checkIfExists($data["cpf"])["cpf_exists"]) {
             throw new Exception("O CPF já existe. Cadastro não realizado.", 404);
         }
 
-        if (Authentication::checkIfExists($data["email"])) {
+        if (Authentication::checkIfExists($data["email"])["client_email_exists"]) {
             throw new Exception("O e-mail já existe. Cadastro não realizado.", 404);
         }
 
@@ -81,7 +83,7 @@ if (method("POST")) {
             throw new Exception("Não foi possível realizar o cadastro", 500);
         }
 
-        output(200, ["msg" => "Agendamento criado com sucesso!"]);
+        output(200, ["msg" => "Cliente criado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }
@@ -98,18 +100,19 @@ if(method("PUT")) {
         validateParameters($data, ["nome", "telefone"], 2);
         validateName($data["nome"]);
         validatePhoneNumber($data["telefone"]);
-        validateCPF($data["cpf"]);
+        validateCPF($_GET["cpf"]);
 
         // Verifica se o cpf do cliente está armazenado na base de dados
-        if(!Client::checkIfExists($data["cpf"])) {
+        if(!Client::checkIfExists($_GET["cpf"])["cpf_exists"]) {
             throw new Exception("Usuário não encontrado", 400);
         }
 
-        $res = Client::updateRegistrationData($data["cpf"], $data["nome"], $data["telefone"]);
+        $res = Client::updateRegistrationData($_GET["cpf"], $data["nome"], $data["telefone"]);
+        echo $res;
         if(!$res) {
-            throw new Exception("Não foi possível editar o usuário", 500);
+            throw new Exception("Nenhum dado do usuário foi modificado", 500);
         }
-        output(200, ["msg" => "Usuário editado com sucesso"]);
+        output(200, ["msg" => "Dados cadastrais do usuário editados com sucesso"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

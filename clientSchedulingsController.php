@@ -4,6 +4,8 @@
 require_once(__DIR__ . "/configs/utils.php");
 // Arquivos com as entidades (models) que vão ser usadas nesta rota.
 require_once(__DIR__ . "/model/Client.php");
+require_once(__DIR__ . "/model/Service.php");
+
 
 // Bloco de código configurando o servidor. Remover os métodos que não forem suportados.
 header("Access-Control-Max-Age: 3600");
@@ -56,12 +58,13 @@ if (method("POST")) {
     if (!$data) {
         $data = $_POST;
     }
+    echo("ENTREI AQUI AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
     try {
         validateParameters(
             $data,
             ["cpf", "services_ids", "data_solicitacao_servico", "data_realizacao_servico"],
-            3
+            4
         );
         validateCPF($data["cpf"]);
         validateDate($data["data_solicitacao_servico"]);
@@ -69,7 +72,7 @@ if (method("POST")) {
 
         validateServicesIds($data["services_ids"]);
         
-        if (!Client::checkIfExists($data["cpf"])["EXISTS"]) {
+        if (!Client::checkIfExists($data["cpf"])["cpf_exists"]) {
             throw new Exception("Agendamento não criado, pois o CPF solicitante para tal agendamento não existe", 422);
         }
 

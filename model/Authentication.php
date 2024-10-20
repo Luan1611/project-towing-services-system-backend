@@ -1,7 +1,6 @@
 <?php
 
 require_once(__DIR__ . "/../configs/Database.php");
-// Caso seja necessário acessar alguma função global auxiliar.
 require_once(__DIR__ . "/../configs/utils.php");
 
 class Authentication {
@@ -17,13 +16,13 @@ class Authentication {
                         email
                     FROM AUTH
                     WHERE email IN(:email)
-                    )");
+                    ) AS client_email_exists");
 
             $values["email"] = $emails;
 
             $sql->execute($values);
 
-            return $sql->fetchAll();
+            return $sql->fetch();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }

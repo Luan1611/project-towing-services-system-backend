@@ -9,7 +9,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # tipo /exemplo/10 ou /exemplo ou /exemplo?chave=valor, etc...
 # Fazer isso para cada arquivo de rota disponível no servidor.
 
-RewriteRule ^service/([0-9]+) serviceController.php?codigo=$1 [L,QSA]
+RewriteRule ^service/([0-9a-zSA-Z]+) serviceController.php?codigo=$1 [L,QSA]
 RewriteRule ^service serviceController.php [L,QSA]
 
 #yet pending
@@ -22,8 +22,8 @@ RewriteRule ^contractor contractorController.php [L,QSA]
 
 RewriteRule ^schedulings overallSchedulingsController.php [L,QSA]
 
-RewriteRule ^client/([0-9]+)/schedulings clientSchedulingsController.php?id=$1 [L,QSA]
-RewriteRule ^client/schedulings clientSchedulingsController.php [L,QSA]
+RewriteRule ^xxx/([0-9]+) clientSchedulingsController.php?id=$1 [L,QSA]
+RewriteRule ^xxx clientSchedulingsController.php [L,QSA]
 
 RewriteRule ^client/([0-9]+) overallClientController.php?cpf=$1 [L,QSA]
 RewriteRule ^client overallClientController.php [L,QSA]

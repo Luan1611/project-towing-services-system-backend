@@ -25,7 +25,7 @@ class Authentication {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
     
@@ -46,7 +46,7 @@ class Authentication {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -67,7 +67,7 @@ class Authentication {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 }

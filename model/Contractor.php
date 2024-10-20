@@ -24,7 +24,7 @@ class Contractor {
             return $sql->fetchAll();
 
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -49,7 +49,7 @@ class Contractor {
             return $sql->rowCount();
             
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 

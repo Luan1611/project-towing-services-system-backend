@@ -24,7 +24,7 @@ class Client {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -49,7 +49,7 @@ class Client {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -78,7 +78,7 @@ class Client {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -103,7 +103,7 @@ class Client {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -131,7 +131,7 @@ class Client {
 
             return $sql->fetchAll();
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -187,7 +187,7 @@ class Client {
             return TRUE;
 
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 
@@ -262,7 +262,7 @@ class Client {
             return $sql->rowCount();
 
         } catch (Exception $e) {
-            output(500, ["msg" => $e-getMessage()]);
+            output(500, ["msg" => $e->getMessage()]);
         }
     }
 

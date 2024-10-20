@@ -26,7 +26,7 @@ if(method("GET")) {
     try {
         //TODO
     } catch (Exception $e) {
-        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500)
+        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);
     }
 }
 

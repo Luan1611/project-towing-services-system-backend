@@ -20,7 +20,7 @@ $data = handleJSONInput();
 private function validateCPFs($cpfsArray) {
     foreach ($cpfsArray as $cpf) {
         if (!preg_match('/^[0-9]{11}$/', $cpf)) {
-            throw new Exception("A lista de CPFs contém um ou mais CPFs inválidos", 422)
+            throw new Exception("A lista de CPFs contém um ou mais CPFs inválidos", 422);
         }
     }
 }
@@ -40,7 +40,7 @@ if(method("GET")) {
 
         output(200, $list);
     } catch (Exception $e) {
-        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500)
+        throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);
     }
 }
 
@@ -51,14 +51,13 @@ if(method("DELETE")) {
     }
 
     try {
-        validateParameters($data, ["cpfs", "date"], 2)
-        validateCPFs($data["cpfs"])
-        validateDate($data["date"])
+        validateParameters($data, ["date"], 2);
+        validateDate($data["date"]);
 
-        $result = deleteClientsServicesSchedulingsByDate($data["cpfs"], $data["date"])
+        $result = Contractor::deleteClientsServicesSchedulingsByDate($data["date"]);
 
         if (!$result) {
-            throw new Exception("Não foi possível deletar os agendamentos dos clientes", 500)
+            throw new Exception("Não foi possível deletar os agendamentos dos clientes", 500);
         }
 
         output(204, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);

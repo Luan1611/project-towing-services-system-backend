@@ -18,7 +18,7 @@ class Client {
                     WHERE cpf IN(:cpf)
                     )");
 
-            $values["cpf"] = $cpfs
+            $values["cpf"] = $cpfs;
 
             $sql->execute($values);
 
@@ -31,6 +31,7 @@ class Client {
     public static function getClientData($cpf) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "SELECT 
                     c.cpf, 
@@ -42,7 +43,7 @@ class Client {
                     ON ca.user_id = c.cpf
                 WHERE c.cpf = :cpf");
 
-            $values['cpf'] = $cpf
+            $values['cpf'] = $cpf;
             
             $sql->execute($values);
 
@@ -59,6 +60,7 @@ class Client {
     public static function getSchedulingsData($cpf) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "SELECT 
                     css.data_realizacao_servico, 
@@ -70,7 +72,7 @@ class Client {
                     ON s.id = css.id_servicos
                 WHERE css.cpf_cliente = :cpf");
 
-            $values['cpf'] = $cpf
+            $values['cpf'] = $cpf;
             
             $sql->execute($values);
 
@@ -86,6 +88,7 @@ class Client {
     public static function getRegistrationData($cpf) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "SELECT 
                     cpf, 
@@ -110,6 +113,7 @@ class Client {
     public static function updateRegistrationData($cpf, $name, $phone) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "UPDATE CLIENTES SET
                     nome = :nome,
@@ -196,11 +200,11 @@ class Client {
 
             $servicesIdLength = count($services_id);
             
-            $stringValues = []
-            $values = []
+            $stringValues = [];
+            $values = [];
 
-            $valoresParaInserir = 4
-             0 * 4 + 1
+            $valoresParaInserir = 4;
+            
             for($i = 0; $i < $servicesIdLength; $i++){
                 
                 $string = "(
@@ -208,9 +212,9 @@ class Client {
                     :${$i * $valoresParaInserir + 2},
                     :${$i * $valoresParaInserir + 3},
                     :${$i * $valoresParaInserir + 4}
-                )"
+                )";
 
-                array_push($stringValues, $string)
+                array_push($stringValues, $string);
                 
                 $values[$i * $valoresParaInserir + 1] = $cpf;  
                 $values[$i * $valoresParaInserir + 2] = $services_id[$i];  
@@ -218,16 +222,17 @@ class Client {
                 $values[$i * $valoresParaInserir + 4] = $data_realizacao_servico;
             }
 
-            $finalString = implode($stringValues, ",")
+            $finalString = implode($stringValues, ",");
 
 
             $stringSql = "INSERT INTO CLIENTE_SOLICITA_SERVICO (
                     cpf_cliente,
                     id_servico,
                     data_solicitacao_servico,
-                    data_realizacao_servico  VALUES ${$finalString})"
+                    data_realizacao_servico  VALUES ${$finalString})";
             
             $sql = $conexao->prepare($stringSql);
+
             $sql->execute($values);
 
             return $sql->rowCount();
@@ -258,24 +263,6 @@ class Client {
 
         } catch (Exception $e) {
             output(500, ["msg" => $e-getMessage()]);
-        }
-    }
-
-    public static function checkIfExists($cpf) {
-        try {
-            $conexao = Conexao::getConexao();
-
-            $sql = $conexao->prepare(
-                "SELECT cpf FROM cliente WHERE cpf = :cpf");
-            
-            $values['cpf'] = $cpf;
-            
-            $sql->execute($values);
-
-            return !empty($sql->fetchAll());
-
-        } catch (Exception $e) {
-            output(500, ["msg" => $e->getMessage()]);
         }
     }
 

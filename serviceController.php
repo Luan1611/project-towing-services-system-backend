@@ -15,20 +15,20 @@ $data = handleJSONInput();
 // e se o mesmo não contém caracteres especiais
 private function validateCode($code) {
     if (!preg_match("/^[a-zA-Z0-9]{2}$/", $code)) {
-        throw new Exception("Código de serviço inválido", 406)
+        throw new Exception("Código de serviço inválido", 406);
     }
 }
 
 //Faz uma chamada para o Model verificar se já existe o código no BD
 private function checkIfCodeExists($code) {
-    return Service::checkIfExists($code)["EXISTS"]
+    return Service::checkIfExists($code)["EXISTS"];
 }
 
 // Verifica se o tipo é composto por no mínimo 1 e no máximo 50 caracteres
 private function validateType($type) {
-    $trimmedType = trim($type)
+    $trimmedType = trim($type);
     if (!preg_match("/^.{1,50}$/", $trimmedType)) {
-        throw new Exception("O tipo de serviço é inválido", 406)
+        throw new Exception("O tipo de serviço é inválido", 406);
     }
 }
 
@@ -36,7 +36,7 @@ private function validateType($type) {
 // e se há apenas caracteres de 0 a 9 na string, aceitando um único ponto opcional
 private function validatePrice($price) {
     if (preg_match('/^\d+(\.\d+)?$/', $valor) && strlen(str_replace('.', '', $valor)) <= 10) {
-        throw new Exception("O preço do serviço é inválido", 406)
+        throw new Exception("O preço do serviço é inválido", 406);
     }
 }
 
@@ -65,13 +65,13 @@ if (method("POST")) {
     }
 
     try {
-        validateParameters($data, ["codigo", "tipo", "preco"], 3)
-        validateCode($data["codigo"])
-        validateType($data["codigo"])
-        validatePrice($data["preco"])
+        validateParameters($data, ["codigo", "tipo", "preco"], 3);
+        validateCode($data["codigo"]);
+        validateType($data["codigo"]);
+        validatePrice($data["preco"]);
 
         if (!empty(getService($data["codigo"]))) {
-            $result = Service::setServiceAsActive($data["codigo"])
+            $result = Service::setServiceAsActive($data["codigo"]);
         } else {
             $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
         }
@@ -92,8 +92,8 @@ if (method("DELETE")) {
     }
 
     try {
-        validateParameters($data, ["codigo"], 1)
-        validateCode($data["codigo"])
+        validateParameters($data, ["codigo"], 1);
+        validateCode($data["codigo"]);
 
         if (!checkIfCodeExists($data["codigo"])) {
             throw new Exception("O serviço cuja deleção foi solicitada não existe no sistema", 404);

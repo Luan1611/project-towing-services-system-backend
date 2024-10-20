@@ -8,6 +8,7 @@ class Service {
     public static function checkIfExists($code) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "SELECT
                     EXISTS(
@@ -17,11 +18,12 @@ class Service {
                     WHERE codigo IN(:code)
                     )");
 
-            $values["code"] = $code
+            $values["code"] = $code;
 
             $sql->execute($values);
             
             return $sql->fetchAll();
+
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }
@@ -30,6 +32,7 @@ class Service {
     public static function checkIfIdsExists($ids) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "SELECT
                     EXISTS(
@@ -39,7 +42,7 @@ class Service {
                     WHERE id IN(:ids)
                     )");
 
-            $values["ids"] = $ids
+            $values["ids"] = $ids;
 
             $sql->execute($values);
             
@@ -55,6 +58,7 @@ class Service {
     public static function getServices() {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "SELECT
                     id,
@@ -67,6 +71,7 @@ class Service {
             $sql->execute();
             
             return $sql->fetchAll();
+
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }
@@ -78,6 +83,7 @@ class Service {
     public static function getService($code) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "SELECT
                     codigo,
@@ -130,6 +136,7 @@ class Service {
             $lastId = $conexao->lastInsertId();
 
             $stmt = $conexao->prepare("SELECT * FROM SERVICOS WHERE id = :id");
+
             $stmt->execute([':id' => $lastId]);
 
             return $stmt->fetchAll();
@@ -144,6 +151,7 @@ class Service {
     public static function updateService($serviceId) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "UPDATE SERVICOS SET
                     codigo = :codigo,
@@ -160,6 +168,7 @@ class Service {
             $sql->execute($values);
 
             return $sql->rowCount();
+
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }
@@ -171,6 +180,7 @@ class Service {
     public static function deleteService($serviceId) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
                 "UPDATE SERVICOS SET
                     active = FALSE,
@@ -193,6 +203,7 @@ class Service {
     public static function setServiceAsActive($serviceCode) {
         try {
             $conexao = Conexao::getConexao();
+            
             $sql = $conexao->prepare(
                 "UPDATE SERVICOS SET
                     active = TRUE,

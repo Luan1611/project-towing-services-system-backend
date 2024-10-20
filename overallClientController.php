@@ -18,20 +18,20 @@ $data = handleJSONInput();
 
 // Verifica se o nome é um nome válido
 private function validateName($name) {
-    $nameTrimmed = trim($name)
+    $nameTrimmed = trim($name);
     $trimmedNameLength = strlen(nameTrimmed);
-    $nameContainsNumericValues = preg_match('/[0-9]/', $name)
-    $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name)
+    $nameContainsNumericValues = preg_match('/[0-9]/', $name);
+    $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name);
 
     if ($trimmedNameLength === 0 || $nameContainsNumericValues || $nameContainsSpecialCharacters) {
-        throw new Exception("Nome inválido", 400)
+        throw new Exception("Nome inválido", 400);
     }
 }
 
 //Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
 private function validatePhoneNumber($phoneNumber) {
     if (!preg_match('/^[0-9]{10,}$/', $phoneNumber)) {
-        throw new Exception("Telefone Inválido", 406)
+        throw new Exception("Telefone Inválido", 406);
     }
 }
 
@@ -41,10 +41,10 @@ if(method("GET")) {
     }
 
     try {
-        validateCPF($data["cpf"])
+        validateCPF($data["cpf"]);
         
         if($data["cpf"]){
-            $client = Client::getClientData($data["cpf"])
+            $client = Client::getClientData($data["cpf"]);
             output(200, $client);
         }
 
@@ -61,10 +61,10 @@ if (method("POST")) {
     }
 
     try {
-        validateParameters($data, ["cpf", "nome", "telefone", "email", "senha"], 5)
-        validateName($data["nome"])
-        validatePhoneNumber($data["telefone"])
-        validateCPF($data["cpf"])
+        validateParameters($data, ["cpf", "nome", "telefone", "email", "senha"], 5);
+        validateName($data["nome"]);
+        validatePhoneNumber($data["telefone"]);
+        validateCPF($data["cpf"]);
 
         
         if (Client::checkIfExists($data["cpf"])) {

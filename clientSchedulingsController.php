@@ -17,10 +17,10 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $data = handleJSONInput();
 
 private function validateName($name) {
-    $nameTrimmed = trim($name)
+    $nameTrimmed = trim($name);
     $trimmedNameLength = strlen($nameTrimmed);
-    $nameContainsNumericValues = preg_match('/[0-9]/', $name)
-    $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name)
+    $nameContainsNumericValues = preg_match('/[0-9]/', $name);
+    $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name);
 
     $isInvalidName =
         $trimmedNameLength === 0
@@ -28,25 +28,27 @@ private function validateName($name) {
         || $nameContainsSpecialCharacters;
 
     if ($isInvalidName) {
-        throw new Exception("Nome inválido", 400)
+        throw new Exception("Nome inválido", 400);
     }
 }
 
 private function validateServicesIds($servicesIds) {
-    $servicesIdsArrayLength = count(servicesIds)
+    $servicesIdsArrayLength = count(servicesIds);
+
     if (!$servicesIdsArrayLength) {
-        throw new Exception("Ids dos serviços não encontrados", 400)
+        throw new Exception("Ids dos serviços não encontrados", 400);
     }
+
     foreach ($servicesIds as $serviceId) {
 		if (!is_int($serviceId) || $serviceId <= 0) {
-            throw new Exception("Id(s) com formato inválido", 400)
+            throw new Exception("Id(s) com formato inválido", 400);
         }
 	}
 }
 
 private function validateSchedulingId($schedulingId) {
     if (!preg_match('/^[0-9]$/', $schedulingId)) {
-        throw new Exception("Id de agendamento Inválido", 422)
+        throw new Exception("Id de agendamento Inválido", 422);
     }
 }
 
@@ -60,7 +62,7 @@ if (method("POST")) {
             $data,
             ["cpf", "services_ids", "data_solicitacao_servico", "data_realizacao_servico"],
             3
-        )
+        );
         validateCPF($data["cpf"]);
         validateDate($data["data_solicitacao_servico"]);
         validateDate($data["data_realizacao_servico"]);
@@ -98,14 +100,14 @@ if(method("DELETE")) {
     }
 
     try {
-        validateParameters($data, ["id"])
-        validateSchedulingId($data, ["id"])
+        validateParameters($data, ["id"]);
+        validateSchedulingId($data, ["id"]);
 
         if (!Scheduling::checkIfIdsExists($data["id"])["EXISTS"]) {
             throw new Exception("Agendamento não deletado, pois o Id do agendamento para tal deleção não existe)", 422);
         }
 
-        $result = Client::deleteScheduling($data, ["id"])
+        $result = Client::deleteScheduling($data, ["id"]);
 
         output(200, ["msg" => "Agendamento deletado com sucesso!"]);
     } catch (Exception $e) {

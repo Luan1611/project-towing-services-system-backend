@@ -9,6 +9,7 @@ class Authentication {
     public static function checkIfExists($emails) {
         try {
             $conexao = Conexao::getConexao();
+            
             $sql = $conexao->prepare(
                 "SELECT
                     EXISTS(
@@ -18,7 +19,7 @@ class Authentication {
                     WHERE email IN(:email)
                     )");
 
-            $values["email"] = $emails
+            $values["email"] = $emails;
 
             $sql->execute($values);
 
@@ -36,9 +37,11 @@ class Authentication {
     public static function getUserAuthenticationData($userData) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
             //TODO
             );
+
             $sql->execute();
 
             return $sql->fetchAll();
@@ -55,9 +58,11 @@ class Authentication {
     public static function createUserAccount($userData) {
         try {
             $conexao = Conexao::getConexao();
+
             $sql = $conexao->prepare(
             //TODO
             );
+
             $sql->execute();
 
             return $sql->fetchAll();

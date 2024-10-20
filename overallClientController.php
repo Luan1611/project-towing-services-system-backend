@@ -17,7 +17,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $data = handleJSONInput();
 
 // Verifica se o nome é um nome válido
-private function validateName($name) {
+function validateName($name) {
     $nameTrimmed = trim($name);
     $trimmedNameLength = strlen(nameTrimmed);
     $nameContainsNumericValues = preg_match('/[0-9]/', $name);
@@ -29,7 +29,7 @@ private function validateName($name) {
 }
 
 //Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
-private function validatePhoneNumber($phoneNumber) {
+function validatePhoneNumber($phoneNumber) {
     if (!preg_match('/^[0-9]{10,}$/', $phoneNumber)) {
         throw new Exception("Telefone Inválido", 406);
     }

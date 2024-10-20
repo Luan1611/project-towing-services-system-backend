@@ -17,7 +17,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $data = handleJSONInput();
 
 // Verifica se os CPFs dos clientes são válidos
-private function validateCPFs($cpfsArray) {
+function validateCPFs($cpfsArray) {
     foreach ($cpfsArray as $cpf) {
         if (!preg_match('/^[0-9]{11}$/', $cpf)) {
             throw new Exception("A lista de CPFs contém um ou mais CPFs inválidos", 422);

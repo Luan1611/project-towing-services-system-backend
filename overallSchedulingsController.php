@@ -26,7 +26,7 @@ if(method("GET")) {
         $schedulingsList = Scheduling::getSchedulings();
 
         if (empty($schedulingsList)) {
-            output(204, ["msg" => "Não há agendamentos para serem exibidos"]);
+            output(200, ["msg" => "Não há agendamentos para serem exibidos"]);
         }
         
         output(200, $schedulingsList);

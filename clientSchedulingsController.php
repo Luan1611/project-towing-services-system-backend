@@ -16,7 +16,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Caso não tenha sido enviado nada no formato JSON, retorna FALSE.
 $data = handleJSONInput();
 
-private function validateName($name) {
+function validateName($name) {
     $nameTrimmed = trim($name);
     $trimmedNameLength = strlen($nameTrimmed);
     $nameContainsNumericValues = preg_match('/[0-9]/', $name);
@@ -32,7 +32,7 @@ private function validateName($name) {
     }
 }
 
-private function validateServicesIds($servicesIds) {
+function validateServicesIds($servicesIds) {
     $servicesIdsArrayLength = count(servicesIds);
 
     if (!$servicesIdsArrayLength) {
@@ -46,7 +46,7 @@ private function validateServicesIds($servicesIds) {
 	}
 }
 
-private function validateSchedulingId($schedulingId) {
+function validateSchedulingId($schedulingId) {
     if (!preg_match('/^[0-9]$/', $schedulingId)) {
         throw new Exception("Id de agendamento Inválido", 422);
     }

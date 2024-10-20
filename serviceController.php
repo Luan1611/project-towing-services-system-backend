@@ -13,19 +13,19 @@ $data = handleJSONInput();
 
 // Verifica se o código é composto por 2 caracteres,
 // e se o mesmo não contém caracteres especiais
-private function validateCode($code) {
+function validateCode($code) {
     if (!preg_match("/^[a-zA-Z0-9]{2}$/", $code)) {
         throw new Exception("Código de serviço inválido", 406);
     }
 }
 
 //Faz uma chamada para o Model verificar se já existe o código no BD
-private function checkIfCodeExists($code) {
+function checkIfCodeExists($code) {
     return Service::checkIfExists($code)["EXISTS"];
 }
 
 // Verifica se o tipo é composto por no mínimo 1 e no máximo 50 caracteres
-private function validateType($type) {
+function validateType($type) {
     $trimmedType = trim($type);
     if (!preg_match("/^.{1,50}$/", $trimmedType)) {
         throw new Exception("O tipo de serviço é inválido", 406);
@@ -34,7 +34,7 @@ private function validateType($type) {
 
 // Verifica se o preço é composto por, no máximo, 10 algarismos (sendo decimal ou inteiro),
 // e se há apenas caracteres de 0 a 9 na string, aceitando um único ponto opcional
-private function validatePrice($price) {
+function validatePrice($price) {
     if (preg_match('/^\d+(\.\d+)?$/', $valor) && strlen(str_replace('.', '', $valor)) <= 10) {
         throw new Exception("O preço do serviço é inválido", 406);
     }

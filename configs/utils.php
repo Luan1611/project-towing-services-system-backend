@@ -16,22 +16,22 @@ function validateDate($date) {
     $dateFormatRegex = '/^\d{4}-\d{2}-\d{2}$/';
 
     if (!preg_match($dateFormatRegex, $data)) {
-        throw new Exception("Formato de Data inválido", 400)
+        throw new Exception("Formato de Data inválido", 400);
     }
 
     // Fazendo Destructuring da data e armazenando em três variáveis.
-    [$ano, $mes, $dia] = explode('-', $date)
+    [$ano, $mes, $dia] = explode('-', $date);
 
     // Checando se a data é uma data válida
     if (!checkdate($mes, $dia, $ano)) {
-        throw new Exception("Data inválida", 400)
+        throw new Exception("Data inválida", 400);
     }
 }
 
 // Verifica se o CPF é composto de 11 "dígitos" (caracteres)
-private function validateCPF($cpf) {
+function validateCPF($cpf) {
     if (!preg_match('/^[0-9]{11}$/', $cpf)) {
-        throw new Exception("CPF Inválido", 422)
+        throw new Exception("CPF Inválido", 422);
     }
 }
 

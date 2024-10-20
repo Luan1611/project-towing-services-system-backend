@@ -70,7 +70,7 @@ if (method("POST")) {
         validateType($data["codigo"]);
         validatePrice($data["preco"]);
 
-        if (!empty(getService($data["codigo"]))) {
+        if (!empty(Service::getService($data["codigo"]))) {
             $result = Service::setServiceAsActive($data["codigo"]);
         } else {
             $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);

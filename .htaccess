@@ -22,8 +22,8 @@ RewriteRule ^contractor contractorController.php [L,QSA]
 
 RewriteRule ^schedulings overallSchedulingsController.php [L,QSA]
 
-RewriteRule ^xxx/([0-9]+) clientSchedulingsController.php?id=$1 [L,QSA]
-RewriteRule ^xxx clientSchedulingsController.php [L,QSA]
+RewriteRule ^xxx/([0-9]+) qualquerNome.php?id=$1 [L,QSA]
+RewriteRule ^xxx qualquerNome.php [L,QSA]
 
 RewriteRule ^client/([0-9]+) overallClientController.php?cpf=$1 [L,QSA]
 RewriteRule ^client overallClientController.php [L,QSA]

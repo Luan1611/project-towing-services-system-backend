@@ -55,10 +55,13 @@ function validateSchedulingId($schedulingId) {
 }
 
 if (method("POST")) {
+    
+    echo("ENTREI AQUI AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
     if (!$data) {
         $data = $_POST;
     }
-    echo("ENTREI AQUI AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    
 
     try {
         validateParameters(
@@ -103,7 +106,7 @@ if(method("DELETE")) {
     }
 
     try {
-        validateParameters($data, ["id"]);
+        validateParameters($data, ["id"], 1);
         validateSchedulingId($data, ["id"]);
 
         if (!Scheduling::checkIfIdsExists($data["id"])["EXISTS"]) {

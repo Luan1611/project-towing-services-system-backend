@@ -35,7 +35,7 @@ function validateName($name) {
 }
 
 function validateServicesIds($servicesIds) {
-    $servicesIdsArrayLength = count(servicesIds);
+    $servicesIdsArrayLength = count($servicesIds);
 
     if (!$servicesIdsArrayLength) {
         throw new Exception("Ids dos serviços não encontrados", 400);
@@ -55,13 +55,9 @@ function validateSchedulingId($schedulingId) {
 }
 
 if (method("POST")) {
-    
-    echo("ENTREI AQUI AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
     if (!$data) {
         $data = $_POST;
     }
-    
 
     try {
         validateParameters(

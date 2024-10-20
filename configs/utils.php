@@ -2,8 +2,9 @@
 
 // Faz validações básicas de parâmetros
 function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
+
     if (!valid($data, $arrayNamesAttributes)) {
-        var_dump($arrayNamesAttributes);
+
         throw new Exception("Parametro(s) incorreto(s)", 400);
     }
     if (count($data) != $inputsNumber) {
@@ -16,7 +17,7 @@ function validateDate($date) {
     // Regex para validar o formato YYYY-MM-DD
     $dateFormatRegex = '/^\d{4}-\d{2}-\d{2}$/';
 
-    if (!preg_match($dateFormatRegex, $data)) {
+    if (!preg_match($dateFormatRegex, $date)) {
         throw new Exception("Formato de Data inválido", 400);
     }
 
@@ -38,19 +39,26 @@ function validateCPF($cpf) {
 
 // Exemplo: valid("POST", ["id", "nome", "ano"]);
 function valid($metodo, $lista) {
+
     $obtidos = array_keys($metodo);
     $nao_encontrados = array_diff($lista, $obtidos);
+
     if (empty($nao_encontrados)) {
+        
         foreach ($lista as $p) {
-            if (empty(trim($metodo[$p]))) {
-                return false;
+            if (!is_array($metodo[$p])) {
+                if (empty(trim($metodo[$p]))) {
+                    return false;
+                }
+            } else {
+                return true;
             }
         }
         return true;
     }
-    var_dump($metodo);
-    var_dump($lista);
+
     return false;
+
 }
 
 // Exemplo: method("PUT");

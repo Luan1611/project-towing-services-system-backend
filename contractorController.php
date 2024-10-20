@@ -44,6 +44,7 @@ if(method("GET")) {
     }
 }
 
+//esta errado
 if(method("DELETE")) {
     if (!$data) {
         $data = $_GET;

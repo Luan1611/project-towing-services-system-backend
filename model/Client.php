@@ -38,7 +38,7 @@ class Client {
                     c.nome, 
                     c.telefone,
                     ca.email
-                FROM cliente c
+                FROM CLIENTES c
                 INNER JOIN auth ca 
                     ON ca.user_id = c.cpf
                 WHERE c.cpf = :cpf");
@@ -94,7 +94,7 @@ class Client {
                     cpf, 
                     nome, 
                     telefone
-                FROM cliente 
+                FROM CLIENTES 
                     WHERE cpf = :cpf");
 
             $values['cpf'] = $cpf;

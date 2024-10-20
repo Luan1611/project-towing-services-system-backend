@@ -48,7 +48,7 @@ if(method("GET")) {
             output(200, $client);
         }
 
-        output(204, ["msg" => "Não há cliente com o cpf informado"]);
+        output(200, ["msg" => "Não há cliente com o cpf informado"]);
 
     } catch (Exception $e) {
         throw new Exception("Não foi possível recuperar os dados dos agendamentos", 500);

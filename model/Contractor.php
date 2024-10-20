@@ -12,12 +12,12 @@ class Contractor {
             $conexao = Conexao::getConexao();
 
             $sql = $conexao->prepare(
-                "SELECT c.nome, c.cpf, c.tel, s.tipo, ssc.data_realizacao_servico
-                    FROM cliente 
-                    INNER JOIN solicitacao_servico_cliente 
-                    ON cliente.id = solicitacao_servico_cliente.id_cliente 
-                    INNER JOIN servico 
-                    ON solicitacao_servico_cliente.id_servico = servico.id");
+                "SELECT C.nome, C.cpf, C.telefone, S.tipo, SSC.data_realizacao_servico
+                    FROM CLIENTES C
+                    INNER JOIN CLIENTE_SOLICITA_SERVICO SSC
+                    ON C.cpf = SSC.cpf_cliente 
+                    INNER JOIN SERVICOS S
+                    ON SSC.id_SERVICO = S.id");
 
             $sql->execute();
 

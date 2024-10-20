@@ -50,7 +50,7 @@ if(method("GET")) {
         $servicesList = Service::getServices();
 
         if (empty($servicesList)) {
-            output(204, ["msg" => "Não há serviços para serem exibidos"]);
+            output(200, ["msg" => "Não há serviços para serem exibidos"]);
         }
         
         output(200, $servicesList);
@@ -101,10 +101,10 @@ if (method("DELETE")) {
         $result = Service::deleteService($data["codigo"]);
 
         if(!$result) {
-            output(204, ["msg" => "Nenhum serviço foi deletado"]);
+            output(200, ["msg" => "Nenhum serviço foi deletado"]);
         }
 
-        output(204, ["msg" => "Serviço deletado com sucesso!"]);
+        output(200, ["msg" => "Serviço deletado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

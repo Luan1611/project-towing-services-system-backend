@@ -35,7 +35,7 @@ if(method("GET")) {
         $list = Contractor::getClientServicesSchedulings();
 
         if (empty($list)) {
-            output(204, ["msg" => "Não há agendamentos de clientes para serem exibidos."]);
+            output(200, ["msg" => "Não há agendamentos de clientes para serem exibidos."]);
         }
 
         output(200, $list);
@@ -60,7 +60,7 @@ if(method("DELETE")) {
             throw new Exception("Não foi possível deletar os agendamentos dos clientes", 500);
         }
 
-        output(204, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);
+        output(200, ["msg" => "Agendamentos de clientes deletados com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
     }

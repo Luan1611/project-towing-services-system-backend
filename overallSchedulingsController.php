@@ -12,11 +12,18 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $data = handleJSONInput();
 
 if(method("GET")) {
-    if (!$data) {
-        $data = $_GET;
-    }
 
     try {
+        if ($_GET) {
+            $clientSchedulingsList = Scheduling::getSchedulingsFromClient($_GET["cpf"]);
+    
+            if (empty($clientSchedulingsList)) {
+                output(200, ["msg" => "Não há agendamentos para serem exibidos"]);
+            }
+            
+            output(200, $clientSchedulingsList);
+        }
+    
         $schedulingsList = Scheduling::getSchedulings();
 
         if (empty($schedulingsList)) {

@@ -5,6 +5,7 @@ require_once(__DIR__ . "/configs/utils.php");
 // Arquivos com as entidades (models) que vão ser usadas nesta rota.
 require_once(__DIR__ . "/model/Client.php");
 require_once(__DIR__ . "/model/Service.php");
+require_once(__DIR__ . "/model/Scheduling.php");
 
 
 // Bloco de código configurando o servidor. Remover os métodos que não forem suportados.
@@ -48,7 +49,7 @@ function validateServicesIds($servicesIds) {
 }
 
 function validateSchedulingId($schedulingId) {
-    if (!preg_match('/^[0-9]$/', $schedulingId)) {
+    if (!preg_match('/[0-9]/', $schedulingId)) {
         throw new Exception("Id de agendamento Inválido", 422);
     }
 }
@@ -115,7 +116,6 @@ if(method("DELETE")) {
         validateParameters($data, ["id"], 1);
         validateSchedulingId($data["id"]);
 
-        //Problema: falta a função checkIfIdsExists (copiar a do Service.php?)
         if (!Scheduling::checkIfExists($data["id"])["scheduling_exists"]) {
             throw new Exception("Agendamento não deletado, pois o Id do agendamento para tal deleção não existe)", 422);
         }

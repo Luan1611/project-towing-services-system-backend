@@ -244,9 +244,9 @@ class Client {
                 WHERE id = :id"
             );
 
-            $values['id'] = $schedulingId;
-                    
-            $sql->execute($values);
+            $sql->bindParam(':id', $schedulingId, PDO::PARAM_INT);
+
+            $sql->execute();
 
             return $sql->rowCount();
 

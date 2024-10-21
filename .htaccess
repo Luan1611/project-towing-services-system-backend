@@ -17,7 +17,7 @@ RewriteRule ^authentication/([0-9]+) authenticationController.php?id=$1 [L,QSA]
 RewriteRule ^authentication authenticationController.php [L,QSA]
 # 
 
-RewriteRule ^contractor/([0-9]+) contractorController.php?date=$1 [L,QSA]
+RewriteRule ^contractor/(\d{4}-\d{2}-\d{2}) contractorController.php?date=$1 [L,QSA]
 RewriteRule ^contractor contractorController.php [L,QSA]
 
 RewriteRule ^schedulings overallSchedulingsController.php [L,QSA]

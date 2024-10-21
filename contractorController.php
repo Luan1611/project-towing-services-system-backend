@@ -45,12 +45,13 @@ if(method("GET")) {
 }
 
 if(method("DELETE")) {
-    if (!$data) {
-        $data = $_GET;
+    if ($data) {
+        output(500, ["msg" => "Metodo DELETE não aceita dados contidos no corpo da requisição (body)"]);
     }
-
+    $data = $_GET;
+    
     try {
-        validateParameters($data, ["date"], 2);
+        validateParameters($data, ["date"], 1);
         validateDate($data["date"]);
 
         $result = Contractor::deleteClientsServicesSchedulingsByDate($data["date"]);

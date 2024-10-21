@@ -1,7 +1,6 @@
 Options +FollowSymLinks
 RewriteEngine On
 
-#TODO TESTAR
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
@@ -22,7 +21,6 @@ RewriteRule ^contractor contractorController.php [L,QSA]
 RewriteRule ^schedulings/([0-9]+) overallSchedulingsController.php?cpf=$1 [L,QSA]
 RewriteRule ^schedulings overallSchedulingsController.php [L,QSA]
 
-#clientSchedulingsController
 RewriteRule ^client-schedulings-data/([0-9]+) aqueleQueNaoPodeSerNomeado.php?id=$1 [L,QSA]
 RewriteRule ^client-schedulings-data aqueleQueNaoPodeSerNomeado.php [L,QSA]
 

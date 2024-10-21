@@ -9,7 +9,7 @@
 <body>
     <h1>Webservice</h1>
 
-    <h2> Cliente - Dados Cadastrais (overallClientController.php) (http://localhost/project-towing-services-system-backend/client/)</h2>
+    <h2> Cliente - Dados Cadastrais (clientRegistrationDataController.php) (http://localhost/project-towing-services-system-backend/client/)</h2>
     <table>
         <thead>
             <tr>
@@ -22,7 +22,7 @@
         <tbody>
             <tr>
                 <td>GET</td>
-                <td>/client/11111111111</td>
+                <td>/client-registration-data/11111111111</td>
                 <td>Recupera os dados cadastrais do cliente</td>
                 <td>
                     {
@@ -35,13 +35,13 @@
             </tr>
             <tr>
                 <td>POST</td>
-                <td>/client/</td>
+                <td>/client-registration-data/</td>
                 <td>Cadastra um novo cliente. Requer cpf, nome, telefone, email e senha.</td>
                 <td>{"msg": "Cliente criado com sucesso!"}</td>
             </tr>
             <tr>
                 <td>PUT</td>
-                <td>/client/45345987274</td>
+                <td>/client-registration-data/45345987274</td>
                 <td>Atualiza os dados cadastrais do cliente. Requer o CPF, nome e telefone.</td>
                 <td>{
                     "msg": "Dados cadastrais do usuário editados com sucesso"
@@ -50,7 +50,10 @@
         </tbody>
     </table>
 
-    <h2> Cliente - Agendamentos (qualquerNome.php) (http://localhost/project-towing-services-system-backend/xxx/)</h2>
+    <h2> Cliente - Agendamentos (aqueleQueNaoPodeSerNomeado.php) (http://localhost/project-towing-services-system-backend/client-schedulings-data/)</h2>
+
+    <p style="color:red"> Olá Prof., tentamos dar o nome correto para o arquivo .php, mas por alguma razão, não foi reconhecido (e outros nomes também não). Planejávamos dar o nome "clientSchedulingsDataController.php".</p>
+
     <table>
         <thead>
             <tr>
@@ -63,7 +66,7 @@
         <tbody>
             <tr>
                 <td>POST</td>
-                <td>/xxx/</td>
+                <td>/client-schedulings-data/</td>
                 <td>Cria um novo agendamento. Requer o CPF, os ids dos serviços, a data de solicitação e a data de realização.</td>
                 <td>{
                     "cpf": "11111111111",
@@ -74,7 +77,7 @@
             </tr>
             <tr>
                 <td>DELETE</td>
-                <td>/xxx/</td>
+                <td>/client-schedulings-data/</td>
                 <td>Deleta um agendamento do cliente (soft delete). Requer o id do agendamento.</td>
                 <td>{"msg": "Agendamento deletado com sucesso!"}</td>
             </tr>
@@ -136,7 +139,7 @@
         </tbody>
     </table>
 
-    <h2> Visitantes (overallSchedulingsController.php) (http://localhost/project-towing-services-system-backend/schedulings/)</h2>
+    <h2> Agendamentos (overallSchedulingsController.php) (http://localhost/project-towing-services-system-backend/schedulings/)</h2>
     <table>
         <thead>
             <tr>
@@ -160,6 +163,21 @@
                     "nome": "luana giovana monteiro",
                     "tipo": "lavagem de carro",
                     "data_realizacao_servico": "2024-01-31"
+                }]</td>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/schedulings/43265409481</td>
+                <td>Recupera a lista de agendamentos de um cliente.</td>
+                <td>[ {
+                    "nome": "Luan Marqueti",
+                    "tipo": "guincho intramunicipal",
+                    "data_realizacao_servico": "2024-06-15"
+                },
+                {
+                    "nome": "Luan Marqueti",
+                    "tipo": "guincho intermunicipal",
+                    "data_realizacao_servico": "2024-05-31"
                 }]</td>
             </tr>
         </tbody>

@@ -37,24 +37,6 @@ function validateCPF($cpf) {
     }
 }
 
-// Verifica se o nome é um nome válido
-function validateName($name) {
-    $nameTrimmed = trim($name);
-    $trimmedNameLength = strlen($nameTrimmed);
-    $nameContainsNumericValues = preg_match('/[0-9]/', $name);
-    $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name);
-
-    $isInvalidName =
-        $trimmedNameLength === 0
-        || $nameContainsNumericValues
-        || $nameContainsSpecialCharacters
-        || $trimmedNameLength > 255;
-
-    if ($isInvalidName) {
-        throw new Exception("Nome inválido", 406);
-    }
-}
-
 // Exemplo: valid("POST", ["id", "nome", "ano"]);
 function valid($metodo, $lista) {
 

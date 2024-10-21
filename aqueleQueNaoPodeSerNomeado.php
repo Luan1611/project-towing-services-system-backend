@@ -32,11 +32,6 @@ function validateSchedulingId($schedulingId) {
     }
 }
 
-
-//TODO: Método GET para carregar os agendamentos do cliente quando o mesmo ir
-// para a sua página Meus Agendamentos (slide 7)
-
-
 if (method("POST")) {
     if (!$data) {
         $data = $_POST;
@@ -74,8 +69,6 @@ if (method("POST")) {
             throw new Exception("Agendamento não criado, em razão de algum erro do servidor. Entre em contato com suporte", 500);
         }
 
-        // Como retornar os agendamentos criados? aqui estou retornando
-        // a quantidade de tuplas afetadas apenas
         output(200, $result);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
@@ -83,8 +76,7 @@ if (method("POST")) {
 }
 
 if(method("DELETE")) {
-
-   if ($data) {
+    if ($data) {
         output(500, ["msg" => "Metodo DELETE não aceita dados contidos no corpo da requisição (body)"]);
     }
 
@@ -106,5 +98,4 @@ if(method("DELETE")) {
     }
 }
 
-// É comum colocar uma resposta de erro caso o método ou operação solicitada não for encontrada.
 output(404, ["msg" => "Método não suportado no momento"]);

@@ -12,6 +12,24 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $data = handleJSONInput();
 
+// Verifica se o nome é um nome válido
+function validateName($name) {
+    $nameTrimmed = trim($name);
+    $trimmedNameLength = strlen($nameTrimmed);
+    $nameContainsNumericValues = preg_match('/[0-9]/', $name);
+    $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name);
+
+    $isInvalidName =
+        $trimmedNameLength === 0
+        || $nameContainsNumericValues
+        || $nameContainsSpecialCharacters
+        || $trimmedNameLength > 255;
+
+    if ($isInvalidName) {
+        throw new Exception("Nome inválido", 406);
+    }
+}
+
 // Verifica se o telefone tem ao menos 10 dígitos, e se é composto
 // apenas por números
 function validatePhoneNumber($phoneNumber) {

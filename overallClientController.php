@@ -82,7 +82,7 @@ if (method("POST")) {
         if (!$result) {
             throw new Exception("Não foi possível realizar o cadastro", 500);
         }
-
+        //TODO: não é pra retornar o novo cliente cadastrado?
         output(200, ["msg" => "Cliente criado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);

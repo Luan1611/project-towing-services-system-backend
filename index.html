@@ -9,7 +9,7 @@
 <body>
     <h1>Webservice</h1>
 
-    <h2> Cliente - Geral (overallClientController.php) (http://localhost/project-towing-services-system-backend/client/)</h2>
+    <h2> Cliente - Dados Cadastrais (overallClientController.php) (http://localhost/project-towing-services-system-backend/client/)</h2>
     <table>
         <thead>
             <tr>
@@ -22,21 +22,67 @@
         <tbody>
             <tr>
                 <td>GET</td>
-                <td>/api/v1/users</td>
-                <td>Recupera a lista de usuários</td>
-                <td>200 OK</td>
+                <td>/client/</td>
+                <td>Recupera os dados cadastrais do cliente</td>
+                <td>
+                    {
+                        "cpf": "11111111111",
+                        "nome": "Luan Marqueti",
+                        "telefone": "16999999999",
+                        "email": "luan@gmail.com"
+                    }
+                </td>
             </tr>
             <tr>
                 <td>POST</td>
-                <td>/api/v1/users</td>
-                <td>Cadastra um novo usuário</td>
-                <td>201 Created</td>
+                <td>/client/</td>
+                <td>Cadastra um novo cliente. Requer cpf, nome, telefone, email e senha.</td>
+                <td>{"msg": "Cliente criado com sucesso!"}</td>
             </tr>
             <tr>
                 <td>PUT</td>
-                <td>/api/v1/users/1</td>
-                <td>Atualiza os dados do usuário 1</td>
-                <td>200 OK</td>
+                <td>/client/45345987274</td>
+                <td>Atualiza os dados cadastrais do cliente. Requer o CPF, nome e telefone.</td>
+                <td>{
+                    "msg": "Dados cadastrais do usuário editados com sucesso"
+                }</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2> Cliente - Agendamentos (qualquerNome.php) (http://localhost/project-towing-services-system-backend/xxx/)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Método</th>
+                <th>Exemplo</th>
+                <th>Descrição</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>/xxx/</td>
+                <td>Recupera os agendamentos do cliente</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/xxx/</td>
+                <td>Cria um novo agendamento. Requer o CPF, os ids dos serviços, a data de solicitação e a data de realização.</td>
+                <td>{
+                    "cpf": "11111111111",
+                    "services_ids": [1, 2],
+                    "data_solicitacao_servico": "2024-06-10",
+                    "data_realizacao_servico": "2024-06-15"
+                }</td>
+            </tr>
+            <tr>
+                <td>DELETE</td>
+                <td>/xxx/</td>
+                <td>Deleta um agendamento do cliente (soft delete). Requer o id do agendamento.</td>
+                <td>{"msg": "Agendamento deletado com sucesso!"}</td>
             </tr>
         </tbody>
     </table>
@@ -54,21 +100,64 @@
         <tbody>
             <tr>
                 <td>GET</td>
-                <td>/api/v1/users</td>
-                <td>Recupera a lista de usuários</td>
-                <td>200 OK</td>
+                <td>/service</td>
+                <td>Recupera a lista de serviços oferecidos pelo prestador de serviço.</td>
+                <td>[
+                {
+                    "id": 8,
+                    "codigo": "Z1",
+                    "tipo": "Guincho especial",
+                    "preco": "1250.40",
+                    "active": 1
+                },
+                {
+                    "id": 9,
+                    "codigo": "Z2",
+                    "tipo": "Guincho especial",
+                    "preco": "1250.40",
+                    "active": 1
+                }
+            ]</td>
             </tr>
             <tr>
                 <td>POST</td>
-                <td>/api/v1/users</td>
-                <td>Cadastra um novo usuário</td>
-                <td>201 Created</td>
+                <td>/service</td>
+                <td>Cadastra um novo serviço. Requer o código do serviço, o tipo e o preço.</td>
+                <td>{
+                    "id": 9,
+                    "codigo": "Z2",
+                    "tipo": "Guincho especial",
+                    "preco": "1250.40",
+                    "created_at": "2024-10-21 16:46:41",
+                    "updated_at": "2024-10-21 16:46:41",
+                    "active": 1
+                }</td>
             </tr>
             <tr>
-                <td>PUT</td>
-                <td>/api/v1/users/1</td>
-                <td>Atualiza os dados do usuário 1</td>
-                <td>200 OK</td>
+                <td>DELETE</td>
+                <td>/service/S1</td>
+                <td>Deleta um serviço. Requer o código do serviço.</td>
+                <td>{"msg": "Serviço deletado com sucesso!"}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2> Visitantes (overallSchedulingsController.php) (http://localhost/project-towing-services-system-backend/schedulings/)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Método</th>
+                <th>Exemplo</th>
+                <th>Descrição</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>/schedulings</td>
+                <td>Recupera a lista de agendamentos feitos por clientes. Os agendamentos estão organizados por datas.</td>
+                <td></td>
             </tr>
         </tbody>
     </table>

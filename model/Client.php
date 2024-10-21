@@ -190,10 +190,8 @@ class Client {
             $conexao = Conexao::getConexao();
 
             $servicesIdLength = count($services_id);
-            
             $stringValues = [];
             $values = [];
-
             $valoresParaInserir = 4;
             
             for($i = 0; $i < $servicesIdLength; $i++) {
@@ -202,17 +200,15 @@ class Client {
                 $value2 = $i * $valoresParaInserir + 2;
                 $value3 = $i * $valoresParaInserir + 3;
                 $value4 = $i * $valoresParaInserir + 4;
+                
+                $string = "(:cpf$value1, :id$value2, :solicitation$value3, :realization$value4)";
 
-                //merda tá aqui
-                $string = "(:$value1, :$value2, :$value3, :$value4)";
-
-                echo $formatedString;
                 array_push($stringValues, $string);
                 
-                $values[$i * $valoresParaInserir + 1] = $cpf;  
-                $values[$i * $valoresParaInserir + 2] = $services_id[$i];
-                $values[$i * $valoresParaInserir + 3] = $data_solicitacao_servico;  
-                $values[$i * $valoresParaInserir + 4] = $data_realizacao_servico;
+                $values['cpf' . ($i * $valoresParaInserir + 1)] = $cpf;  
+                $values['id' . ($i * $valoresParaInserir + 2)] = $services_id[$i];
+                $values['solicitation' . ($i * $valoresParaInserir + 3)] = $data_solicitacao_servico;  
+                $values['realization' . ($i * $valoresParaInserir + 4)] = $data_realizacao_servico;
             }
 
             $finalString = implode(",", $stringValues);
@@ -224,11 +220,6 @@ class Client {
                 data_realizacao_servico) VALUES $finalString";
             
             $sql = $conexao->prepare($stringSql);
-
-            // echo $stringSql;
-            // echo $finalString;
-
-            // var_dump($values);
 
             $sql->execute($values);
 
@@ -242,6 +233,7 @@ class Client {
     /* 
     Deleta um agendamento do cliente
     */
+
     public static function deleteScheduling($schedulingId) {
         try {
             $conexao = Conexao::getConexao();

@@ -53,6 +53,11 @@ function validateSchedulingId($schedulingId) {
     }
 }
 
+
+//TODO: Método GET para carregar os agendamentos do cliente quando o mesmo ir
+// para a sua página Meus Agendamentos (slide 7)
+
+
 if (method("POST")) {
     if (!$data) {
         $data = $_POST;
@@ -77,11 +82,12 @@ if (method("POST")) {
         //esse Servce::checkIfIdsExists tem que ser invocada para cada um dos itens do array
         //coloca dentro do foreach, se algum der false deu ruim tem que 
         //cair no if
+        //Arrumado
         if (!Service::checkIfIdsExists($data["services_ids"])["services_ids_exists"]) {
             throw new Exception("Agendamento não criado, pois o(s) Id(s) do(s) serviço(s)informado(s) para tal agendamento não existe/existem)", 422);
         }
 
-        //Problema nesta função do model abaixo
+        //Arrumado
         $result = Client::createScheduling(
             $data["cpf"],
             $data["services_ids"],
@@ -89,11 +95,13 @@ if (method("POST")) {
             $data["data_realizacao_servico"]
         );
 
-        echo "cheguei aqui";
+
         if (!$result) {
             throw new Exception("Agendamento não criado, em razão de algum erro do servidor. Entre em contato com suporte", 500);
         }
 
+        // Como retornar os agendamentos criados? aqui estou retornando
+        // a quantidade de tuplas afetadas apenas
         output(200, $result);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
@@ -101,14 +109,17 @@ if (method("POST")) {
 }
 
 if(method("DELETE")) {
+    //TODO: refinar o if abaixo (DELETE tem dado no corpo da requisição?)
+    // Copiar do serviceController? o if do método DELETE de lá
     if (!$data) {
         $data = $_GET;
     }
 
     try {
         validateParameters($data, ["id"], 1);
-        validateSchedulingId($data, ["id"]);
+        validateSchedulingId($data["id"]);
 
+        //Problema: falta a função checkIfIdsExists (copiar a do Service.php?)
         if (!Scheduling::checkIfIdsExists($data["id"])["EXISTS"]) {
             throw new Exception("Agendamento não deletado, pois o Id do agendamento para tal deleção não existe)", 422);
         }

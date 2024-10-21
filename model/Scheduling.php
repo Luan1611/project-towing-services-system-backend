@@ -23,7 +23,7 @@ class Scheduling {
 
             $sql->execute($values);
             
-            return $sql->fetchA();
+            return $sql->fetch();
 
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);

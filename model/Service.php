@@ -140,7 +140,7 @@ class Service {
 
             $stmt->execute([':id' => $lastId]);
 
-            return $stmt->fetchAll();
+            return $stmt->fetch();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
         }

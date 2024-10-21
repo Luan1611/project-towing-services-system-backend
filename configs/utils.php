@@ -3,7 +3,7 @@
 // Faz validações básicas de parâmetros
 function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
 
-    //TODO trocar ordem dos ifs
+    //TODO trocar ordem dos ifs (se der tempo)
     if (!valid($data, $arrayNamesAttributes)) {
         throw new Exception("Parametro(s) incorreto(s) ou ausente(s)", 400);
     }

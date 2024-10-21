@@ -15,7 +15,6 @@ RewriteRule ^service serviceController.php [L,QSA]
 #yet pending
 RewriteRule ^authentication/([0-9]+) authenticationController.php?id=$1 [L,QSA]
 RewriteRule ^authentication authenticationController.php [L,QSA]
-# 
 
 RewriteRule ^contractor/(\d{4}-\d{2}-\d{2}) contractorController.php?date=$1 [L,QSA]
 RewriteRule ^contractor contractorController.php [L,QSA]
@@ -23,8 +22,8 @@ RewriteRule ^contractor contractorController.php [L,QSA]
 RewriteRule ^schedulings overallSchedulingsController.php [L,QSA]
 
 #clientSchedulingsController
-RewriteRule ^xxx/([0-9]+) qualquerNome.php?id=$1 [L,QSA]
-RewriteRule ^xxx qualquerNome.php [L,QSA]
+RewriteRule ^client-schedulings-data/([0-9]+) aqueleQueNaoPodeSerNomeado.php?id=$1 [L,QSA]
+RewriteRule ^client-schedulings-data aqueleQueNaoPodeSerNomeado.php [L,QSA]
 
-RewriteRule ^client/([0-9]+) overallClientController.php?cpf=$1 [L,QSA]
-RewriteRule ^client overallClientController.php [L,QSA]
+RewriteRule ^client/([0-9]+) clientRegistrationDataController.php?cpf=$1 [L,QSA]
+RewriteRule ^client clientRegistrationDataController.php [L,QSA]

@@ -3,10 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
     <title>Webservice</title>
 </head>
 <body>
     <h1>Webservice</h1>
-    <p>Recomenda-se sempre haver um arquivo index.html onde são explicados os métodos, rotas e retornos esperados de quem for utilizar a API desenvolvida.</p>
+
+    <h2> overallClientController (http://localhost/project-towing-services-system-backend/client/)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Método</th>
+                <th>Exemplo</th>
+                <th>Descrição</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>/api/v1/users</td>
+                <td>Recupera a lista de usuários</td>
+                <td>200 OK</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/api/v1/users</td>
+                <td>Cadastra um novo usuário</td>
+                <td>201 Created</td>
+            </tr>
+            <tr>
+                <td>PUT</td>
+                <td>/api/v1/users/1</td>
+                <td>Atualiza os dados do usuário 1</td>
+                <td>200 OK</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

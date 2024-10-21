@@ -1,36 +1,19 @@
 <?php
 
-// Arquivos com funções úteis que vão ser usadas nesta rota.
 require_once(__DIR__ . "/configs/utils.php");
-// Arquivos com as entidades (models) que vão ser usadas nesta rota.
 require_once(__DIR__ . "/model/Client.php");
 require_once(__DIR__ . "/model/Authentication.php");
 
-
-// Bloco de código configurando o servidor. Remover os métodos que não forem suportados.
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Usado para receber os dados brutos do corpo da requisição.
-// Caso não tenha sido enviado nada no formato JSON, retorna FALSE.
 $data = handleJSONInput();
 
-// Verifica se o nome é um nome válido
-function validateName($name) {
-    $nameTrimmed = trim($name);
-    $trimmedNameLength = strlen($nameTrimmed);
-    $nameContainsNumericValues = preg_match('/[0-9]/', $name);
-    $nameContainsSpecialCharacters = preg_match('/[,\;\[\]\(\)\{\}]/', $name);
-
-    if ($trimmedNameLength === 0 || $nameContainsNumericValues || $nameContainsSpecialCharacters) {
-        throw new Exception("Nome inválido", 400);
-    }
-}
-
-//Verifica se o telefone tem ao menos 10 dígitos, sem zeros à esquerda
+// Verifica se o telefone tem ao menos 10 dígitos, e se é composto
+// apenas por números
 function validatePhoneNumber($phoneNumber) {
     if (!preg_match('/^[0-9]{10,}$/', $phoneNumber)) {
         throw new Exception("Telefone Inválido", 406);
@@ -70,11 +53,11 @@ if (method("POST")) {
         validateCPF($data["cpf"]);
 
         if (Client::checkIfExists($data["cpf"])["cpf_exists"]) {
-            throw new Exception("O CPF já existe. Cadastro não realizado.", 404);
+            throw new Exception("O CPF já existe. Cadastro não realizado.", 403);
         }
 
         if (Authentication::checkIfExists($data["email"])["client_email_exists"]) {
-            throw new Exception("O e-mail já existe. Cadastro não realizado.", 404);
+            throw new Exception("O e-mail já existe. Cadastro não realizado.", 403);
         }
 
         $result = Client::createAccount($data["email"], $data["senha"], $data["cpf"], $data["nome"], $data["telefone"]);
@@ -82,7 +65,7 @@ if (method("POST")) {
         if (!$result) {
             throw new Exception("Não foi possível realizar o cadastro", 500);
         }
-        //TODO: não é pra retornar o novo cliente cadastrado?
+
         output(200, ["msg" => "Cliente criado com sucesso!"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);
@@ -104,7 +87,7 @@ if(method("PUT")) {
 
         // Verifica se o cpf do cliente está armazenado na base de dados
         if(!Client::checkIfExists($_GET["cpf"])["cpf_exists"]) {
-            throw new Exception("Usuário não encontrado", 400);
+            throw new Exception("Usuário não encontrado", 404);
         }
 
         $res = Client::updateRegistrationData($_GET["cpf"], $data["nome"], $data["telefone"]);
@@ -119,5 +102,4 @@ if(method("PUT")) {
     }
 }
 
-// É comum colocar uma resposta de erro caso o método ou operação solicitada não for encontrada.
 output(404, ["msg" => "Método não suportado no momento"]);

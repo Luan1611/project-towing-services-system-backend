@@ -32,8 +32,7 @@ function validateType($type) {
     }
 }
 
-// Verifica se o preço é composto por, no máximo, 10 algarismos (sendo decimal ou inteiro),
-// e se há apenas caracteres de 0 a 9 na string, aceitando um único ponto opcional
+// Verifica se o preço é composto por, no máximo, 10 algarismos (sendo decimal ou inteiro), e se há apenas caracteres de 0 a 9 na string, aceitando um único ponto opcional
 function validatePrice($price) {
     if (!preg_match('/^\d+(\.\d+)?$/', $price) || strlen(str_replace('.', '', $price)) > 10) {
         throw new Exception("O preço do serviço é inválido", 406);
@@ -67,14 +66,11 @@ if (method("POST")) {
     try {
         validateParameters($data, ["codigo", "tipo", "preco"], 3);
         validateCode($data["codigo"]);
-        validateType($data["codigo"]);
+        validateType($data["tipo"]);
         validatePrice($data["preco"]);
 
         if (!empty(Service::getService($data["codigo"]))) {
-            echo("entrei no ifs");
-            echo($data["codigo"]);
             $result = Service::setServiceAsActive($data["codigo"]);
-            echo($result);
         } else {
             $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
         }
@@ -102,10 +98,11 @@ if (method("DELETE")) {
         if (!checkIfCodeExists($data["codigo"])) {
             throw new Exception("O serviço cuja deleção foi solicitada não existe no sistema", 404);
         }
+
         $result = Service::deleteService($data["codigo"]);
-        echo "Saí do deleteService";
+
         if(!$result) {
-            output(200, ["msg" => "Nenhum serviço foi deletado"]);
+            output(200, ["msg" => "O serviço não foi deletado, pois não existe na base de dados."]);
         }
 
         output(200, ["msg" => "Serviço deletado com sucesso!"]);

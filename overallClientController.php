@@ -43,10 +43,11 @@ if(method("GET")) {
     }
 
     try {
+        validateParameters($data, ["cpf"], 1);
         validateCPF($data["cpf"]);
         
-        if($data["cpf"]){
-            $client = Client::getClientData($data["cpf"]);
+        $client = Client::getClientData($data["cpf"]);
+        if ($client) {
             output(200, $client);
         }
 
@@ -68,7 +69,6 @@ if (method("POST")) {
         validatePhoneNumber($data["telefone"]);
         validateCPF($data["cpf"]);
 
-        
         if (Client::checkIfExists($data["cpf"])["cpf_exists"]) {
             throw new Exception("O CPF já existe. Cadastro não realizado.", 404);
         }
@@ -108,10 +108,11 @@ if(method("PUT")) {
         }
 
         $res = Client::updateRegistrationData($_GET["cpf"], $data["nome"], $data["telefone"]);
-        echo $res;
+
         if(!$res) {
             throw new Exception("Nenhum dado do usuário foi modificado", 500);
         }
+
         output(200, ["msg" => "Dados cadastrais do usuário editados com sucesso"]);
     } catch (Exception $e) {
         output($e->getCode(), ["msg" => $e->getMessage()]);

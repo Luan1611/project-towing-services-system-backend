@@ -3,9 +3,9 @@
 // Faz validações básicas de parâmetros
 function validateParameters($data, $arrayNamesAttributes, $inputsNumber) {
 
+    //TODO trocar ordem dos ifs
     if (!valid($data, $arrayNamesAttributes)) {
-
-        throw new Exception("Parametro(s) incorreto(s)", 400);
+        throw new Exception("Parametro(s) incorreto(s) ou ausente(s)", 400);
     }
     if (count($data) != $inputsNumber) {
         throw new Exception("Quantidade de parametros inválida", 406);

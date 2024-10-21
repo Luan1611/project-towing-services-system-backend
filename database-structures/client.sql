@@ -3,6 +3,6 @@ CREATE TABLE CLIENTES (
     PRIMARY KEY (cpf),
     nome VARCHAR(255) NOT NULL,
     telefone VARCHAR(20),
-    active BOOLEAN DEFAULT TRUE,
+    active BOOLEAN DEFAULT TRUE
     CHECK (cpf REGEXP '^[0-9]{11}$')
 )

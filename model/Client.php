@@ -14,7 +14,6 @@ class Client {
                     EXISTS (SELECT cpf FROM CLIENTES WHERE cpf IN(:cpf)) AS cpf_exists");
 
             $values["cpf"] = $cpfs;
-
             $sql->execute($values);
 
             return $sql->fetch();
@@ -119,9 +118,6 @@ class Client {
             $values['telefone'] = $phone;
             $values['cpf'] = $cpf;
 
-            //TODO: checar quantas tuplas foram afetadas e condicionar o return
-            // ao resultado
-                    
             $sql->execute($values);
 
             return $sql->rowCount();
@@ -200,33 +196,39 @@ class Client {
 
             $valoresParaInserir = 4;
             
-            for($i = 0; $i < $servicesIdLength; $i++){
-                
-                $string = "(
-                    :${$i * $valoresParaInserir + 1},
-                    :${$i * $valoresParaInserir + 2},
-                    :${$i * $valoresParaInserir + 3},
-                    :${$i * $valoresParaInserir + 4}
-                )";
+            for($i = 0; $i < $servicesIdLength; $i++) {
 
+                $value1 = $i * $valoresParaInserir + 1;
+                $value2 = $i * $valoresParaInserir + 2;
+                $value3 = $i * $valoresParaInserir + 3;
+                $value4 = $i * $valoresParaInserir + 4;
+
+                //merda tá aqui
+                $string = "(:$value1, :$value2, :$value3, :$value4)";
+
+                echo $formatedString;
                 array_push($stringValues, $string);
                 
                 $values[$i * $valoresParaInserir + 1] = $cpf;  
-                $values[$i * $valoresParaInserir + 2] = $services_id[$i];  
+                $values[$i * $valoresParaInserir + 2] = $services_id[$i];
                 $values[$i * $valoresParaInserir + 3] = $data_solicitacao_servico;  
                 $values[$i * $valoresParaInserir + 4] = $data_realizacao_servico;
             }
 
-            $finalString = implode($stringValues, ",");
-
+            $finalString = implode(",", $stringValues);
 
             $stringSql = "INSERT INTO CLIENTE_SOLICITA_SERVICO (
-                    cpf_cliente,
-                    id_servico,
-                    data_solicitacao_servico,
-                    data_realizacao_servico  VALUES ${$finalString})";
+                cpf_cliente,
+                id_servico,
+                data_solicitacao_servico,
+                data_realizacao_servico) VALUES $finalString";
             
             $sql = $conexao->prepare($stringSql);
+
+            // echo $stringSql;
+            // echo $finalString;
+
+            // var_dump($values);
 
             $sql->execute($values);
 

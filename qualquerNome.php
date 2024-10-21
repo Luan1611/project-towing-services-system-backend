@@ -40,7 +40,6 @@ function validateServicesIds($servicesIds) {
     if (!$servicesIdsArrayLength) {
         throw new Exception("Ids dos serviços não encontrados", 400);
     }
-
     foreach ($servicesIds as $serviceId) {
 		if (!is_int($serviceId) || $serviceId <= 0) {
             throw new Exception("Id(s) com formato inválido", 400);
@@ -74,13 +73,15 @@ if (method("POST")) {
         if (!Client::checkIfExists($data["cpf"])["cpf_exists"]) {
             throw new Exception("Agendamento não criado, pois o CPF solicitante para tal agendamento não existe", 422);
         }
+
         //esse Servce::checkIfIdsExists tem que ser invocada para cada um dos itens do array
         //coloca dentro do foreach, se algum der false deu ruim tem que 
         //cair no if
         if (!Service::checkIfIdsExists($data["services_ids"])["services_ids_exists"]) {
-            throw new Exception("Agendamento não criado, pois o(s) Id(s) do(s) serviços(s)informado(s) para tal agendamento não existe/existem)", 422);
+            throw new Exception("Agendamento não criado, pois o(s) Id(s) do(s) serviço(s)informado(s) para tal agendamento não existe/existem)", 422);
         }
 
+        //Problema nesta função do model abaixo
         $result = Client::createScheduling(
             $data["cpf"],
             $data["services_ids"],
@@ -88,6 +89,7 @@ if (method("POST")) {
             $data["data_realizacao_servico"]
         );
 
+        echo "cheguei aqui";
         if (!$result) {
             throw new Exception("Agendamento não criado, em razão de algum erro do servidor. Entre em contato com suporte", 500);
         }

@@ -28,23 +28,25 @@ class Service {
         }
     }
 
+    //resolvida;
     public static function checkIfIdsExists($ids) {
         try {
+
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
             $conexao = Conexao::getConexao();
-            var_dump($ids);
             $sql = $conexao->prepare(
                 "SELECT
                     EXISTS(
                     SELECT
                         id
                     FROM SERVICOS
-                    WHERE id IN(:ids)
+                    WHERE id IN($placeholders)
                     ) AS services_ids_exists");
 
-            $values["ids"] = $ids;
-            var_dump($values);
-            $sql->execute($values);
-            
+            $sql->execute($ids);
+
+            //$sql->fetch() está retornando 0
             return $sql->fetch();
         } catch (Exception $e) {
             output(500, ["msg" => $e->getMessage()]);
@@ -176,7 +178,7 @@ class Service {
     /* 
     Deleta um serviço
     */
-    public static function deleteService($serviceId) {
+    public static function deleteService($code) {
         try {
             $conexao = Conexao::getConexao();
 
@@ -184,11 +186,11 @@ class Service {
                 "UPDATE SERVICOS SET
                     active = FALSE,
                     updated_at = NOW()
-                WHERE id = :serviceId");
+                WHERE codigo = :serviceCode");
 
-            $values['serviceId'] = $serviceId;
+            $values['serviceCode'] = $code;
 
-            $sql->execute();
+            $sql->execute($values);
 
             return $sql->rowCount();
         } catch (Exception $e) {

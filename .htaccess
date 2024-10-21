@@ -26,5 +26,5 @@ RewriteRule ^schedulings overallSchedulingsController.php [L,QSA]
 RewriteRule ^client-schedulings-data/([0-9]+) aqueleQueNaoPodeSerNomeado.php?id=$1 [L,QSA]
 RewriteRule ^client-schedulings-data aqueleQueNaoPodeSerNomeado.php [L,QSA]
 
-RewriteRule ^client/([0-9]+) clientRegistrationDataController.php?cpf=$1 [L,QSA]
-RewriteRule ^client clientRegistrationDataController.php [L,QSA]
+RewriteRule ^client-registration-data/([0-9]+) clientRegistrationDataController.php?cpf=$1 [L,QSA]
+RewriteRule ^client-registration-data clientRegistrationDataController.php [L,QSA]

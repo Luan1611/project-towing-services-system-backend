@@ -62,12 +62,6 @@
         </thead>
         <tbody>
             <tr>
-                <td>GET</td>
-                <td>/xxx/</td>
-                <td>Recupera os agendamentos do cliente</td>
-                <td></td>
-            </tr>
-            <tr>
                 <td>POST</td>
                 <td>/xxx/</td>
                 <td>Cria um novo agendamento. Requer o CPF, os ids dos serviços, a data de solicitação e a data de realização.</td>
@@ -157,7 +151,56 @@
                 <td>GET</td>
                 <td>/schedulings</td>
                 <td>Recupera a lista de agendamentos feitos por clientes. Os agendamentos estão organizados por datas.</td>
-                <td></td>
+                <td>[ {
+                    "nome": "Luan marqueti",
+                    "tipo": "s",
+                    "data_realizacao_servico": "2024-06-15"
+                },
+                {
+                    "nome": "luana giovana monteiro",
+                    "tipo": "lavagem de carro",
+                    "data_realizacao_servico": "2024-01-31"
+                }]</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2> Prestador de Serviço (contractorController.php) (http://localhost/project-towing-services-system-backend/contractor/)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Método</th>
+                <th>Exemplo</th>
+                <th>Descrição</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>/contractor</td>
+                <td>Recupera a lista de agendamentos feitos por clientes. Os agendamentos estão organizados por datas.</td>
+                <td>[{
+                    "nome": "Luan marqueti",
+                    "cpf": "11111111111",
+                    "telefone": "16888888888",
+                    "tipo": "s",
+                    "data_realizacao_servico": "2024-06-15"
+                },
+                {
+                    "nome": "luana giovana monteiro",
+                    "cpf": "33333333333",
+                    "telefone": "1234567809",
+                    "tipo": "lavagem de carro",
+                    "data_realizacao_servico": "2024-01-31"
+                }]</td>
+            </tr>
+                <td>DELETE</td>
+                <td>/contractor/2024-03-18</td>
+                <td>Deleta (soft delete) todos os agendamentos feitos por clientes em determinada data.</td>
+                <td>{
+                    "msg": "Agendamentos de clientes deletados com sucesso!"
+                }</td>
             </tr>
         </tbody>
     </table>

@@ -31,7 +31,7 @@ class Service {
     public static function checkIfIdsExists($ids) {
         try {
             $conexao = Conexao::getConexao();
-
+            var_dump($ids);
             $sql = $conexao->prepare(
                 "SELECT
                     EXISTS(
@@ -42,7 +42,7 @@ class Service {
                     ) AS services_ids_exists");
 
             $values["ids"] = $ids;
-
+            var_dump($values);
             $sql->execute($values);
             
             return $sql->fetch();

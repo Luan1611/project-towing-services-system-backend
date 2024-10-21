@@ -74,8 +74,10 @@ if (method("POST")) {
         if (!Client::checkIfExists($data["cpf"])["cpf_exists"]) {
             throw new Exception("Agendamento não criado, pois o CPF solicitante para tal agendamento não existe", 422);
         }
-
-        if (!Services::checkIfIdsExists($data["services_ids"])["EXISTS"]) {
+        //esse Servce::checkIfIdsExists tem que ser invocada para cada um dos itens do array
+        //coloca dentro do foreach, se algum der false deu ruim tem que 
+        //cair no if
+        if (!Service::checkIfIdsExists($data["services_ids"])["services_ids_exists"]) {
             throw new Exception("Agendamento não criado, pois o(s) Id(s) do(s) serviços(s)informado(s) para tal agendamento não existe/existem)", 422);
         }
 

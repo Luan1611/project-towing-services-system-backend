@@ -71,7 +71,10 @@ if (method("POST")) {
         validatePrice($data["preco"]);
 
         if (!empty(Service::getService($data["codigo"]))) {
+            echo("entrei no ifs");
+            echo($data["codigo"]);
             $result = Service::setServiceAsActive($data["codigo"]);
+            echo($result);
         } else {
             $result = Service::createService($data["codigo"], $data["tipo"], $data["preco"]);
         }

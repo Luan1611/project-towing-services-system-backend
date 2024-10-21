@@ -79,15 +79,10 @@ if (method("POST")) {
             throw new Exception("Agendamento não criado, pois o CPF solicitante para tal agendamento não existe", 422);
         }
 
-        //esse Servce::checkIfIdsExists tem que ser invocada para cada um dos itens do array
-        //coloca dentro do foreach, se algum der false deu ruim tem que 
-        //cair no if
-        //Arrumado
         if (!Service::checkIfIdsExists($data["services_ids"])["services_ids_exists"]) {
             throw new Exception("Agendamento não criado, pois o(s) Id(s) do(s) serviço(s)informado(s) para tal agendamento não existe/existem)", 422);
         }
 
-        //Arrumado
         $result = Client::createScheduling(
             $data["cpf"],
             $data["services_ids"],
@@ -109,18 +104,19 @@ if (method("POST")) {
 }
 
 if(method("DELETE")) {
-    //TODO: refinar o if abaixo (DELETE tem dado no corpo da requisição?)
-    // Copiar do serviceController? o if do método DELETE de lá
-    if (!$data) {
-        $data = $_GET;
+
+   if ($data) {
+        output(500, ["msg" => "Metodo DELETE não aceita dados contidos no corpo da requisição (body)"]);
     }
+
+    $data = $_GET;
 
     try {
         validateParameters($data, ["id"], 1);
         validateSchedulingId($data["id"]);
 
         //Problema: falta a função checkIfIdsExists (copiar a do Service.php?)
-        if (!Scheduling::checkIfIdsExists($data["id"])["EXISTS"]) {
+        if (!Scheduling::checkIfExists($data["id"])["scheduling_exists"]) {
             throw new Exception("Agendamento não deletado, pois o Id do agendamento para tal deleção não existe)", 422);
         }
 

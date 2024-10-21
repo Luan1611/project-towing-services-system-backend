@@ -15,7 +15,7 @@ class Service {
                         codigo
                     FROM SERVICOS
                     WHERE codigo IN(:code)
-                    ) AS service_exists");
+                    AND active = TRUE) AS service_exists");
 
             $values["code"] = $code;
 
@@ -210,11 +210,11 @@ class Service {
                 "UPDATE SERVICOS SET
                     active = TRUE,
                     updated_at = NOW()
-                WHERE codigo like '%:codigo%'");
+                WHERE codigo =:codigo");
 
             $values['codigo'] = $serviceCode;
 
-            $sql->execute();
+            $sql->execute($values);
 
             return $sql->rowCount();
         } catch (Exception $e) {
